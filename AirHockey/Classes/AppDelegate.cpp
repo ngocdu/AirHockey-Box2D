@@ -30,6 +30,18 @@ bool AppDelegate::applicationDidFinishLaunching()
     CCDirector *pDirector = CCDirector::sharedDirector();
     pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
 
+    CCSize screenSize = CCEGLView::sharedOpenGLView()->getFrameSize();
+    CCEGLView::sharedOpenGLView()->setDesignResolutionSize(768, 1024, kResolutionExactFit);
+    
+    vector<string>searchPaths;
+    if (screenSize.width > 768) {
+        CCLOG("hd %f", screenSize.width);
+        searchPaths.push_back("/hd");
+        pDirector->setContentScaleFactor(2);
+    }
+    
+    CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
+    
     // turn on display FPS
     pDirector->setDisplayStats(true);
 

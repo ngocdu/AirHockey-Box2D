@@ -11,6 +11,9 @@
 // When you import this file, you import all the cocos2d classes
 #include "cocos2d.h"
 #include "Box2D.h"
+#include "MyContactListener.h"
+
+USING_NS_CC;
 
 class PhysicsSprite : public cocos2d::CCSprite
 {
@@ -24,6 +27,7 @@ private:
 };
 
 class HelloWorld : public cocos2d::CCLayer {
+    CCSize _screenSize;
 public:
     ~HelloWorld();
     HelloWorld();
@@ -36,12 +40,42 @@ public:
     void addNewSpriteAtPosition(cocos2d::CCPoint p);
 
     virtual void draw();
+    virtual void ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
+    virtual void ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
     virtual void ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
+    
     void update(float dt);
     
 private:
+    b2Body* _groundBody;
+    b2Body *_player1Body;
+    b2Body *_player2Body;
+    b2Body *_ballBody;
+    
+    b2Fixture *_player1Fixture;
+    b2Fixture *_player2Fixture;
+    b2Fixture *_ballFixture;
+    
+    b2Fixture *lowerMiddle;
+    b2Fixture *higherMiddle;
+    
+    CCSprite *_player1;
+    CCSprite *_player2;
+    CCSprite *_ball;
+    
+    CCLabelTTF *_player1ScoreLabel;
+    CCLabelTTF *_player2ScoreLabel;
+    
+    int _player1Score;
+    int _player2Score;
+    
+    CCArray *_players;
+    
     b2World* world;
     cocos2d::CCTexture2D* m_pSpriteTexture; // weak ref
+    
+    b2MouseJoint *_mouseJoint;
+    MyContactListener *_contactListener;
 };
 
 #endif // __HELLO_WORLD_H__

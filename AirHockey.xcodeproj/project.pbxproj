@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F729FC3176AF08A000FE6E7 /* court.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FBF176AF08A000FE6E7 /* court.png */; };
+		0F729FC4176AF08A000FE6E7 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FC0176AF08A000FE6E7 /* logo.png */; };
+		0F729FC5176AF08A000FE6E7 /* mallet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FC1176AF08A000FE6E7 /* mallet.png */; };
+		0F729FC6176AF08A000FE6E7 /* puck.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FC2176AF08A000FE6E7 /* puck.png */; };
 		0FA83DF81768807300A04769 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DF71768807300A04769 /* QuartzCore.framework */; };
 		0FA83DFA1768807300A04769 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DF91768807300A04769 /* OpenGLES.framework */; };
 		0FA83DFC1768807300A04769 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DFB1768807300A04769 /* OpenAL.framework */; };
@@ -283,9 +287,14 @@
 		0FA8419E1768808600A04769 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FA8419D1768808600A04769 /* AppDelegate.cpp */; };
 		0FA841A11768808600A04769 /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FA841A01768808600A04769 /* HelloWorldScene.cpp */; };
 		0FA841A31768808700A04769 /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA841A21768808700A04769 /* blocks.png */; };
+		0FB5B2E61769792D00E2A745 /* MyContactListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5B2E41769792D00E2A745 /* MyContactListener.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F729FBF176AF08A000FE6E7 /* court.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = court.png; sourceTree = "<group>"; };
+		0F729FC0176AF08A000FE6E7 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		0F729FC1176AF08A000FE6E7 /* mallet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mallet.png; sourceTree = "<group>"; };
+		0F729FC2176AF08A000FE6E7 /* puck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = puck.png; sourceTree = "<group>"; };
 		0FA83DF41768807300A04769 /* AirHockey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirHockey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FA83DF71768807300A04769 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0FA83DF91768807300A04769 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -882,6 +891,8 @@
 		0FA8419F1768808600A04769 /* HelloWorldScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HelloWorldScene.h; path = Classes/HelloWorldScene.h; sourceTree = "<group>"; };
 		0FA841A01768808600A04769 /* HelloWorldScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HelloWorldScene.cpp; path = Classes/HelloWorldScene.cpp; sourceTree = "<group>"; };
 		0FA841A21768808700A04769 /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blocks.png; path = Resources/blocks.png; sourceTree = "<group>"; };
+		0FB5B2E41769792D00E2A745 /* MyContactListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MyContactListener.cpp; path = Classes/MyContactListener.cpp; sourceTree = "<group>"; };
+		0FB5B2E51769792D00E2A745 /* MyContactListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyContactListener.h; path = Classes/MyContactListener.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -905,6 +916,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F729FBE176AF08A000FE6E7 /* sd */ = {
+			isa = PBXGroup;
+			children = (
+				0F729FBF176AF08A000FE6E7 /* court.png */,
+				0F729FC0176AF08A000FE6E7 /* logo.png */,
+				0F729FC1176AF08A000FE6E7 /* mallet.png */,
+				0F729FC2176AF08A000FE6E7 /* puck.png */,
+			);
+			name = sd;
+			path = Resources/sd;
+			sourceTree = "<group>";
+		};
 		0FA83DEB1768807300A04769 = {
 			isa = PBXGroup;
 			children = (
@@ -952,6 +975,7 @@
 		0FA83E081768807300A04769 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0F729FBE176AF08A000FE6E7 /* sd */,
 				0FA83E091768807300A04769 /* CloseNormal.png */,
 				0FA83E0B1768807300A04769 /* CloseSelected.png */,
 				0FA83E0D1768807300A04769 /* Default.png */,
@@ -2079,6 +2103,8 @@
 				0FA8419D1768808600A04769 /* AppDelegate.cpp */,
 				0FA8419F1768808600A04769 /* HelloWorldScene.h */,
 				0FA841A01768808600A04769 /* HelloWorldScene.cpp */,
+				0FB5B2E41769792D00E2A745 /* MyContactListener.cpp */,
+				0FB5B2E51769792D00E2A745 /* MyContactListener.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -2147,6 +2173,10 @@
 				0FA83EBA1768807700A04769 /* ChangeLog in Resources */,
 				0FA840241768808000A04769 /* project.pbxproj in Resources */,
 				0FA841A31768808700A04769 /* blocks.png in Resources */,
+				0F729FC3176AF08A000FE6E7 /* court.png in Resources */,
+				0F729FC4176AF08A000FE6E7 /* logo.png in Resources */,
+				0F729FC5176AF08A000FE6E7 /* mallet.png in Resources */,
+				0F729FC6176AF08A000FE6E7 /* puck.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2409,6 +2439,7 @@
 				0FA841971768808600A04769 /* b2Rope.cpp in Sources */,
 				0FA8419E1768808600A04769 /* AppDelegate.cpp in Sources */,
 				0FA841A11768808600A04769 /* HelloWorldScene.cpp in Sources */,
+				0FB5B2E61769792D00E2A745 /* MyContactListener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2443,7 +2474,7 @@
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/third_party/ios\"",
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/ios\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2474,7 +2505,7 @@
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/third_party/ios\"",
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/ios\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2485,12 +2516,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Do Kien (ZWHFY635HC)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Do Kien (ZWHFY635HC)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = AirHockey/Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = AirHockey/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/AirHockey/libs/cocos2dx/platform/third_party/ios/libraries\"",
@@ -2501,6 +2535,8 @@
 					"-lsqlite3",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "1F16F956-0F97-4680-8FD2-B60075FCA658";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1F16F956-0F97-4680-8FD2-B60075FCA658";
 				USER_HEADER_SEARCH_PATHS = "\"AirHockey/libs\"";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2510,11 +2546,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Do Kien (ZWHFY635HC)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Do Kien (ZWHFY635HC)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = AirHockey/Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = AirHockey/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/AirHockey/libs/cocos2dx/platform/third_party/ios/libraries\"",
@@ -2525,6 +2564,8 @@
 					"-lsqlite3",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "1F16F956-0F97-4680-8FD2-B60075FCA658";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1F16F956-0F97-4680-8FD2-B60075FCA658";
 				USER_HEADER_SEARCH_PATHS = "\"AirHockey/libs\"";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -2550,6 +2591,7 @@
 				0FA841A81768808700A04769 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
