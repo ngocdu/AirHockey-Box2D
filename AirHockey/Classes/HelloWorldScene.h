@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "Box2D.h"
 #include "MyContactListener.h"
+#include "GameSprite.h"
 
 USING_NS_CC;
 

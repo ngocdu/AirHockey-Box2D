@@ -7,8 +7,6 @@
 //
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "MyContactListener.h"
-
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -91,7 +89,7 @@ HelloWorld::HelloWorld()
     court->setPosition(ccp(_screenSize.width * 0.5, _screenSize.height * 0.5));
     this->addChild(court);
     
-    _player1 = CCSprite::create("player1_2.png");
+    _player1 = GameSprite::gameSpriteWidthFile("player1_2.png");
     _player1->setTag(99);
     _player1->setPosition(ccp(_screenSize.width * 0.5,
                               _player1->getContentSize().width));
@@ -116,7 +114,7 @@ HelloWorld::HelloWorld()
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
     
     
-    _player2 = CCSprite::create("player2_2.png");
+    _player2 = GameSprite::gameSpriteWidthFile("player2_2.png");
     _player2->setPosition(ccp(_screenSize.width * 0.5,
                               _screenSize.height - _player1->getContentSize().width));
     _player2->setTag(99);
@@ -385,51 +383,104 @@ void HelloWorld::update(float dt)
 
 void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event){
     CCSetIterator i;
+    CCTouch *touch;
+    CCPoint tap;
+    GameSprite *player;
     
     for (i = touches->begin(); i != touches->end(); i++) {
         if (_mouseJoint != NULL) return;
-        CCTouch *touch = (CCTouch*)(*i);
-        CCPoint tap = touch->getLocation();
-
-        b2Vec2 locationWorld = b2Vec2(tap.x / PTM_RATIO, tap.y / PTM_RATIO);
+        touch = (CCTouch*)(*i);
+        if (touch) {
+            tap = touch->getLocation();
+            for (int p = 0; p < 2; p++) {
+                player = (GameSprite *) _players->objectAtIndex(p);
+                if (player->boundingBox().containsPoint(tap)) {
+                    player->setTouch(touch);
+                }
+            }
+        }
         
-        if (_player1Fixture->TestPoint(locationWorld)) {
-            b2MouseJointDef md;
-            md.bodyA = _groundBody;
-            md.bodyB = _player1Body;
-            md.target = locationWorld;
-            md.collideConnected = true;
-            md.maxForce = 100000.0f * _player1Body->GetMass();
-            md.dampingRatio = 0;
-            md.frequencyHz = 1000;
-            
-            _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
-            _player1Body->SetAwake(true);
-        }
-        if (_player2Fixture->TestPoint(locationWorld)) {
-            b2MouseJointDef md;
-            md.bodyA = _groundBody;
-            md.bodyB = _player2Body;
-            md.target = locationWorld;
-            md.collideConnected = true;
-            md.maxForce = 100000.0f * _player2Body->GetMass();
-            md.dampingRatio = 0;
-            md.frequencyHz = 1000;
-            
-            _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
-            _player2Body->SetAwake(true);
-        }
+//        tap = touch->getLocation();
+//        if (_mouseJoint != NULL) return;
+//        b2Vec2 locationWorld = b2Vec2(tap.x / PTM_RATIO, tap.y / PTM_RATIO);
+//        
+//        if (_player1Fixture->TestPoint(locationWorld)) {
+//            b2MouseJointDef md;
+//            md.bodyA = _groundBody;
+//            md.bodyB = _player1Body;
+//            md.target = locationWorld;
+//            md.collideConnected = true;
+//            md.maxForce = 100000.0f * _player1Body->GetMass();
+//            md.dampingRatio = 0;
+//            md.frequencyHz = 1000;
+//            
+//            _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
+//            _player1Body->SetAwake(true);
+//        }
+//        if (_player2Fixture->TestPoint(locationWorld)) {
+//            b2MouseJointDef md;
+//            md.bodyA = _groundBody;
+//            md.bodyB = _player2Body;
+//            md.target = locationWorld;
+//            md.collideConnected = true;
+//            md.maxForce = 100000.0f * _player2Body->GetMass();
+//            md.dampingRatio = 0;
+//            md.frequencyHz = 1000;
+//            
+//            _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
+//            _player2Body->SetAwake(true);
+//        }
     }
 }
 
 void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
     CCSetIterator i;
+    CCTouch *touch;
+    CCPoint tap;
+    
+    GameSprite *player;
     
     for (i = touches->begin(); i != touches->end(); i++) {
         if (_mouseJoint == NULL) return;
+        touch = (CCTouch *)(*i);
         
-        CCTouch  *myTouch = (CCTouch *)(*i);
-        CCPoint location = myTouch->getLocationInView();
+        if (touch) {
+            tap = touch->getLocation();
+            for (int p = 0; p < 2; p++) {
+                player = (GameSprite*)_players->objectAtIndex(p);
+                
+                if (player->getTouch() != NULL && player->getTouch() == touch) {
+                    b2Vec2 locationWorld = b2Vec2(tap.x / PTM_RATIO, tap.y / PTM_RATIO);
+                    if (p==0) {
+                        b2MouseJointDef md;
+                        md.bodyA = _groundBody;
+                        md.bodyB = _player1Body;
+                        md.target = locationWorld;
+                        md.collideConnected = true;
+                        md.maxForce = 100000.0f * _player1Body->GetMass();
+                        md.dampingRatio = 0;
+                        md.frequencyHz = 1000;
+                        
+                        _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
+                        _player1Body->SetAwake(true);
+                    }
+                    if (p==1) {
+                        b2MouseJointDef md;
+                        md.bodyA = _groundBody;
+                        md.bodyB = _player2Body;
+                        md.target = locationWorld;
+                        md.collideConnected = true;
+                        md.maxForce = 100000.0f * _player1Body->GetMass();
+                        md.dampingRatio = 0;
+                        md.frequencyHz = 1000;
+                        
+                        _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
+                        _player2Body->SetAwake(true);
+                    }
+                }
+            }
+        }
+        CCPoint location = touch->getLocationInView();
         location = CCDirector::sharedDirector()->convertToGL(location);
         b2Vec2 locationWorld = b2Vec2(location.x / PTM_RATIO, location.y / PTM_RATIO);
         
