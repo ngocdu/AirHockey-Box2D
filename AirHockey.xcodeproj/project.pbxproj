@@ -11,6 +11,18 @@
 		0F729FC4176AF08A000FE6E7 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FC0176AF08A000FE6E7 /* logo.png */; };
 		0F729FC5176AF08A000FE6E7 /* mallet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FC1176AF08A000FE6E7 /* mallet.png */; };
 		0F729FC6176AF08A000FE6E7 /* puck.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FC2176AF08A000FE6E7 /* puck.png */; };
+		0F729FDB176EA89B000FE6E7 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FD9176EA89B000FE6E7 /* background.png */; };
+		0F729FDC176EA89B000FE6E7 /* background2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FDA176EA89B000FE6E7 /* background2.png */; };
+		0F729FE0176EAC6C000FE6E7 /* ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FDD176EAC6B000FE6E7 /* ball.png */; };
+		0F729FE1176EAC6C000FE6E7 /* player1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FDE176EAC6B000FE6E7 /* player1.png */; };
+		0F729FE2176EAC6C000FE6E7 /* player2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FDF176EAC6C000FE6E7 /* player2.png */; };
+		0F729FE6176EB7CB000FE6E7 /* ball_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FE3176EB7CB000FE6E7 /* ball_2.png */; };
+		0F729FE7176EB7CB000FE6E7 /* player1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FE4176EB7CB000FE6E7 /* player1_2.png */; };
+		0F729FE8176EB7CB000FE6E7 /* player2_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FE5176EB7CB000FE6E7 /* player2_2.png */; };
+		0F729FEC176EC1EE000FE6E7 /* hit.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FEA176EC1EE000FE6E7 /* hit.wav */; };
+		0F729FED176EC1EE000FE6E7 /* score.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FEB176EC1EE000FE6E7 /* score.wav */; };
+		0F729FF1176EE8D6000FE6E7 /* counter.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FEF176EE8D6000FE6E7 /* counter.plist */; };
+		0F729FF2176EE8D6000FE6E7 /* counter.pvr.ccz in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FF0176EE8D6000FE6E7 /* counter.pvr.ccz */; };
 		0FA83DF81768807300A04769 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DF71768807300A04769 /* QuartzCore.framework */; };
 		0FA83DFA1768807300A04769 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DF91768807300A04769 /* OpenGLES.framework */; };
 		0FA83DFC1768807300A04769 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DFB1768807300A04769 /* OpenAL.framework */; };
@@ -295,6 +307,18 @@
 		0F729FC0176AF08A000FE6E7 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		0F729FC1176AF08A000FE6E7 /* mallet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mallet.png; sourceTree = "<group>"; };
 		0F729FC2176AF08A000FE6E7 /* puck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = puck.png; sourceTree = "<group>"; };
+		0F729FD9176EA89B000FE6E7 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		0F729FDA176EA89B000FE6E7 /* background2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background2.png; sourceTree = "<group>"; };
+		0F729FDD176EAC6B000FE6E7 /* ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ball.png; path = Resources/sd/ball.png; sourceTree = "<group>"; };
+		0F729FDE176EAC6B000FE6E7 /* player1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = player1.png; path = Resources/sd/player1.png; sourceTree = "<group>"; };
+		0F729FDF176EAC6C000FE6E7 /* player2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = player2.png; path = Resources/sd/player2.png; sourceTree = "<group>"; };
+		0F729FE3176EB7CB000FE6E7 /* ball_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ball_2.png; path = Resources/sd/ball_2.png; sourceTree = "<group>"; };
+		0F729FE4176EB7CB000FE6E7 /* player1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = player1_2.png; path = Resources/sd/player1_2.png; sourceTree = "<group>"; };
+		0F729FE5176EB7CB000FE6E7 /* player2_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = player2_2.png; path = Resources/sd/player2_2.png; sourceTree = "<group>"; };
+		0F729FEA176EC1EE000FE6E7 /* hit.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hit.wav; sourceTree = "<group>"; };
+		0F729FEB176EC1EE000FE6E7 /* score.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = score.wav; sourceTree = "<group>"; };
+		0F729FEF176EE8D6000FE6E7 /* counter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = counter.plist; sourceTree = "<group>"; };
+		0F729FF0176EE8D6000FE6E7 /* counter.pvr.ccz */ = {isa = PBXFileReference; lastKnownFileType = file; path = counter.pvr.ccz; sourceTree = "<group>"; };
 		0FA83DF41768807300A04769 /* AirHockey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirHockey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FA83DF71768807300A04769 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0FA83DF91768807300A04769 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -919,6 +943,8 @@
 		0F729FBE176AF08A000FE6E7 /* sd */ = {
 			isa = PBXGroup;
 			children = (
+				0F729FD9176EA89B000FE6E7 /* background.png */,
+				0F729FDA176EA89B000FE6E7 /* background2.png */,
 				0F729FBF176AF08A000FE6E7 /* court.png */,
 				0F729FC0176AF08A000FE6E7 /* logo.png */,
 				0F729FC1176AF08A000FE6E7 /* mallet.png */,
@@ -926,6 +952,26 @@
 			);
 			name = sd;
 			path = Resources/sd;
+			sourceTree = "<group>";
+		};
+		0F729FE9176EC1EE000FE6E7 /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				0F729FEA176EC1EE000FE6E7 /* hit.wav */,
+				0F729FEB176EC1EE000FE6E7 /* score.wav */,
+			);
+			name = sound;
+			path = Resources/sound;
+			sourceTree = "<group>";
+		};
+		0F729FEE176EE8D6000FE6E7 /* packed */ = {
+			isa = PBXGroup;
+			children = (
+				0F729FEF176EE8D6000FE6E7 /* counter.plist */,
+				0F729FF0176EE8D6000FE6E7 /* counter.pvr.ccz */,
+			);
+			name = packed;
+			path = Resources/packed;
 			sourceTree = "<group>";
 		};
 		0FA83DEB1768807300A04769 = {
@@ -975,6 +1021,14 @@
 		0FA83E081768807300A04769 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0F729FEE176EE8D6000FE6E7 /* packed */,
+				0F729FE9176EC1EE000FE6E7 /* sound */,
+				0F729FE3176EB7CB000FE6E7 /* ball_2.png */,
+				0F729FE4176EB7CB000FE6E7 /* player1_2.png */,
+				0F729FE5176EB7CB000FE6E7 /* player2_2.png */,
+				0F729FDD176EAC6B000FE6E7 /* ball.png */,
+				0F729FDE176EAC6B000FE6E7 /* player1.png */,
+				0F729FDF176EAC6C000FE6E7 /* player2.png */,
 				0F729FBE176AF08A000FE6E7 /* sd */,
 				0FA83E091768807300A04769 /* CloseNormal.png */,
 				0FA83E0B1768807300A04769 /* CloseSelected.png */,
@@ -2177,6 +2231,18 @@
 				0F729FC4176AF08A000FE6E7 /* logo.png in Resources */,
 				0F729FC5176AF08A000FE6E7 /* mallet.png in Resources */,
 				0F729FC6176AF08A000FE6E7 /* puck.png in Resources */,
+				0F729FDB176EA89B000FE6E7 /* background.png in Resources */,
+				0F729FDC176EA89B000FE6E7 /* background2.png in Resources */,
+				0F729FE0176EAC6C000FE6E7 /* ball.png in Resources */,
+				0F729FE1176EAC6C000FE6E7 /* player1.png in Resources */,
+				0F729FE2176EAC6C000FE6E7 /* player2.png in Resources */,
+				0F729FE6176EB7CB000FE6E7 /* ball_2.png in Resources */,
+				0F729FE7176EB7CB000FE6E7 /* player1_2.png in Resources */,
+				0F729FE8176EB7CB000FE6E7 /* player2_2.png in Resources */,
+				0F729FEC176EC1EE000FE6E7 /* hit.wav in Resources */,
+				0F729FED176EC1EE000FE6E7 /* score.wav in Resources */,
+				0F729FF1176EE8D6000FE6E7 /* counter.plist in Resources */,
+				0F729FF2176EE8D6000FE6E7 /* counter.pvr.ccz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2474,7 +2540,7 @@
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/third_party/ios\"",
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/ios\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2505,7 +2571,7 @@
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/third_party/ios\"",
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/ios\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

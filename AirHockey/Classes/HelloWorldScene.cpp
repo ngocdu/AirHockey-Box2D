@@ -87,11 +87,11 @@ HelloWorld::HelloWorld()
     _player2Score = 0;
     _screenSize = CCDirector::sharedDirector()->getWinSize();
     
-    CCSprite *court = CCSprite::create("court.png");
+    CCSprite *court = CCSprite::create("background2.png");
     court->setPosition(ccp(_screenSize.width * 0.5, _screenSize.height * 0.5));
     this->addChild(court);
     
-    _player1 = CCSprite::create("mallet.png");
+    _player1 = CCSprite::create("player1_2.png");
     _player1->setTag(99);
     _player1->setPosition(ccp(_screenSize.width * 0.5,
                               _player1->getContentSize().width));
@@ -107,15 +107,16 @@ HelloWorld::HelloWorld()
     b2FixtureDef player1FixtureDef;
     b2CircleShape circle1;
     float m_radius1 = _player1->getContentSize().height/2;
+        CCLOG("radius2: %f", m_radius1);
     circle1.m_radius = m_radius1/PTM_RATIO;
     player1FixtureDef.shape = &circle1;
-    player1FixtureDef.density = 10.0f;
+    player1FixtureDef.density = 100.0f;
     player1FixtureDef.friction = 10.0f;
-    player1FixtureDef.restitution = 0.2f;
+    player1FixtureDef.restitution = 1.0f;
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
     
     
-    _player2 = CCSprite::create("mallet.png");
+    _player2 = CCSprite::create("player2_2.png");
     _player2->setPosition(ccp(_screenSize.width * 0.5,
                               _screenSize.height - _player1->getContentSize().width));
     _player2->setTag(99);
@@ -130,23 +131,23 @@ HelloWorld::HelloWorld()
     b2FixtureDef player2FixtureDef;
     b2CircleShape circle2;
     float m_radius2 = _player2->getContentSize().height/2;
+    CCLOG("radius2: %f", m_radius2);
     circle2.m_radius = m_radius2/PTM_RATIO;
     player2FixtureDef.shape = &circle2;
-    player2FixtureDef.density = 10.0f;
+    player2FixtureDef.density = 100.0f;
     player2FixtureDef.friction = 10.0f;
-    player2FixtureDef.restitution = 0.2f;
+    player2FixtureDef.restitution = 1.0f;
     _player2Fixture = _player2Body->CreateFixture(&player2FixtureDef);
     
     
-    _ball = CCSprite::create("puck.png");
+    _ball = CCSprite::create("ball_2.png");
     _ball->setPosition(ccp(_screenSize.width * 0.5,
                            _screenSize.height * 0.5 -_ball->getContentSize().width/2));
     this->addChild(_ball, 1, 10);
     b2BodyDef ballBodyDef;
     ballBodyDef.type = b2_dynamicBody;
-    ballBodyDef.position.Set(_screenSize.width * 0.5 / PTM_RATIO,
-                             (_screenSize.height * 0.5 -
-                              _ball->getContentSize().width/2 ) / PTM_RATIO);
+    ballBodyDef.position.Set(_screenSize.width/2/PTM_RATIO,
+                             _screenSize.height/2/PTM_RATIO);
     ballBodyDef.userData = _ball;
     _ballBody = world->CreateBody(&ballBodyDef);
     b2FixtureDef ballFixtureDef;
@@ -154,27 +155,45 @@ HelloWorld::HelloWorld()
     float m_radius3 = _ball->getContentSize().height/2;
     circle3.m_radius = m_radius3/PTM_RATIO;
     ballFixtureDef.shape = &circle3;
-    ballFixtureDef.density = 10.0f;
-    ballFixtureDef.friction = 0.7f;
-    ballFixtureDef.restitution = 0.8f;
+    ballFixtureDef.density = 0.0f;
+    ballFixtureDef.friction = 1.0f;
+    ballFixtureDef.restitution = 0.5f;
     ballFixtureDef.filter.groupIndex = -10;
     _ballFixture = _ballBody->CreateFixture(&ballFixtureDef);
-    
     
     _players = CCArray::create(_player1, _player2, NULL);
     _players->retain();
     
-    _player1ScoreLabel = CCLabelTTF::create("0", "Arial", 60);
-    _player1ScoreLabel->setPosition(ccp(_screenSize.width - 60,
-                                        _screenSize.height * 0.5 - 80));
-    _player1ScoreLabel->setRotation(90);
-    this->addChild(_player1ScoreLabel);
     
-    _player2ScoreLabel = CCLabelTTF::create("0", "Arial", 60);
-    _player2ScoreLabel->setPosition(ccp(_screenSize.width - 60,
-                                        _screenSize.height * 0.5 + 80));
-    _player2ScoreLabel->setRotation(90);
-    this->addChild(_player2ScoreLabel);
+    CCSpriteBatchNode *counter = CCSpriteBatchNode::create("counter.pvr.ccz");
+    this->addChild(counter);
+    CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("counter.plist");
+    
+    _player1ScoreLabel1 = CCSprite::createWithSpriteFrameName("0.png");
+    _player1ScoreLabel1->setScale(0.7);
+    _player1ScoreLabel1->setPosition(ccp(_screenSize.width - 115,
+                                        _screenSize.height * 0.5 - 130));
+    _player1ScoreLabel1->setRotation(90);
+    this->addChild(_player1ScoreLabel1);
+    _player1ScoreLabel2 = CCSprite::createWithSpriteFrameName("0.png");
+    _player1ScoreLabel2->setScale(0.7);
+    _player1ScoreLabel2->setPosition(ccp(_screenSize.width - 115,
+                                         _screenSize.height * 0.5 - 100));
+    _player1ScoreLabel2->setRotation(90);
+    this->addChild(_player1ScoreLabel2);
+    
+    _player2ScoreLabel1 = CCSprite::createWithSpriteFrameName("0.png");
+    _player2ScoreLabel1->setScale(0.7);
+    _player2ScoreLabel1->setPosition(ccp(_screenSize.width - 115,
+                                        _screenSize.height * 0.5 + 100));
+    _player2ScoreLabel1->setRotation(90);
+    this->addChild(_player2ScoreLabel1);
+    _player2ScoreLabel2 = CCSprite::createWithSpriteFrameName("0.png");
+    _player2ScoreLabel2->setScale(0.7);
+    _player2ScoreLabel2->setPosition(ccp(_screenSize.width - 115,
+                                         _screenSize.height * 0.5 + 130));
+    _player2ScoreLabel2->setRotation(90);
+    this->addChild(_player2ScoreLabel2);
 
     
     scheduleUpdate();
@@ -190,8 +209,6 @@ HelloWorld::~HelloWorld()
 
 void HelloWorld::initPhysics()
 {
-
-    CCSize s = CCDirector::sharedDirector()->getWinSize();
 
     b2Vec2 gravity;
     gravity.Set(0.0f, 0.0f);
@@ -226,22 +243,70 @@ void HelloWorld::initPhysics()
     // Define the ground box shape.
     b2EdgeShape groundBox;
 
-    // bottom
+    // bottom_left
+    groundBox.Set(b2Vec2(0, 70/PTM_RATIO),
+                  b2Vec2(260/PTM_RATIO, 70/PTM_RATIO));
+    _groundBody->CreateFixture(&groundBox, 0);
+    
+    // bottom_right
+    groundBox.Set(b2Vec2((s.width-260)/PTM_RATIO, 70/PTM_RATIO),
+                  b2Vec2(s.width/PTM_RATIO, 70/PTM_RATIO));
+    _groundBody->CreateFixture(&groundBox, 0);
+    
+    //bottom_middle
+    groundBox.Set(b2Vec2(260/PTM_RATIO, 70/PTM_RATIO),
+                  b2Vec2((s.width-260)/PTM_RATIO, 70/PTM_RATIO));
+    b2FixtureDef bottomMiddleDef;
+    bottomMiddleDef.shape = &groundBox;
+    bottomMiddleDef.filter.groupIndex = -10;
+    _groundBody->CreateFixture(&bottomMiddleDef);
 
-    groundBox.Set(b2Vec2(0,0), b2Vec2(s.width/PTM_RATIO,0));
-    _groundBody->CreateFixture(&groundBox,0);
-
-    // top
-    groundBox.Set(b2Vec2(0,s.height/PTM_RATIO), b2Vec2(s.width/PTM_RATIO,s.height/PTM_RATIO));
-    _groundBody->CreateFixture(&groundBox,0);
-
+    // bottom_middle1
+    groundBox.Set(b2Vec2(260/PTM_RATIO, 70/PTM_RATIO),
+                  b2Vec2(260/PTM_RATIO, 0));
+    _groundBody->CreateFixture(&groundBox, 0);
+    
+    // bottom_middle2
+    groundBox.Set(b2Vec2((s.width-260)/PTM_RATIO, 70/PTM_RATIO),
+                  b2Vec2((s.width-260)/PTM_RATIO, 0));
+    _groundBody->CreateFixture(&groundBox, 0);
+    
+    // top_left
+    groundBox.Set(b2Vec2(0,(s.height-70)/PTM_RATIO),
+                  b2Vec2(260/PTM_RATIO,(s.height-70)/PTM_RATIO));
+    _groundBody->CreateFixture(&groundBox, 0);
+    
+    // top_right
+    groundBox.Set(b2Vec2((s.width-260)/PTM_RATIO,(s.height-70)/PTM_RATIO),
+                  b2Vec2(s.width/PTM_RATIO,(s.height-70)/PTM_RATIO));
+    _groundBody->CreateFixture(&groundBox, 0);
+    
+    //top_middle
+    groundBox.Set(b2Vec2(260/PTM_RATIO, (s.height-70)/PTM_RATIO),
+                  b2Vec2((s.width-260)/PTM_RATIO, (s.height-70)/PTM_RATIO));
+    b2FixtureDef topMiddleDef;
+    topMiddleDef.shape = &groundBox;
+    topMiddleDef.filter.groupIndex = -10;
+    _groundBody->CreateFixture(&topMiddleDef);
+    
+    // top_middle1
+    groundBox.Set(b2Vec2(260/PTM_RATIO,(s.height-70)/PTM_RATIO),
+                  b2Vec2(260/PTM_RATIO, s.height/PTM_RATIO));
+    _groundBody->CreateFixture(&groundBox, 0);
+    
+    // top_middle2
+    groundBox.Set(b2Vec2((s.width-260)/PTM_RATIO,(s.height-70)/PTM_RATIO),
+                  b2Vec2((s.width-260)/PTM_RATIO, s.height/PTM_RATIO));
+    _groundBody->CreateFixture(&groundBox, 0);
+    
     // left
-    groundBox.Set(b2Vec2(0,s.height/PTM_RATIO), b2Vec2(0,0));
-    _groundBody->CreateFixture(&groundBox,0);
+    groundBox.Set(b2Vec2(55/PTM_RATIO,s.height/PTM_RATIO), b2Vec2(55/PTM_RATIO,0));
+    _groundBody->CreateFixture(&groundBox, 0);
 
     // right
-    groundBox.Set(b2Vec2(s.width/PTM_RATIO,s.height/PTM_RATIO), b2Vec2(s.width/PTM_RATIO,0));
-    _groundBody->CreateFixture(&groundBox,0);
+    groundBox.Set(b2Vec2((s.width-45)/PTM_RATIO,s.height/PTM_RATIO),
+                  b2Vec2((s.width-45)/PTM_RATIO,0));
+    _groundBody->CreateFixture(&groundBox, 0);
     
     // middle
     groundBox.Set(b2Vec2(0, s.height/2/PTM_RATIO),
@@ -277,7 +342,8 @@ void HelloWorld::update(float dt)
 {
     
     int velocityIterations = 8;
-    int positionIterations = 1;
+    int positionIterations = 3;
+    
     
     // Instruct the world to perform a single step of simulation. It is
     // generally best to keep the time step and iterations fixed.
@@ -294,7 +360,26 @@ void HelloWorld::update(float dt)
                 b->SetLinearVelocity(b2Vec2(0, 0));
                 b->SetFixedRotation(true);
             }
+            
         }
+    }
+    
+//    std::vector<MyContact>::iterator pos;
+//    for (pos = _contactListener->_contacts.begin();
+//         pos != _contactListener->_contacts.end(); ++pos) {
+//        MyContact contact = *pos;
+//    }
+    
+    
+    
+    if (_ball->getPositionY() >= s.height-55) {
+        HelloWorld::playerScore(1);
+        HelloWorld::gameReset();
+    }
+    
+    if (_ball->getPositionY() <= 55) {
+        HelloWorld::playerScore(2);
+        HelloWorld::gameReset();
     }
 }
 
@@ -314,7 +399,9 @@ void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event
             md.bodyB = _player1Body;
             md.target = locationWorld;
             md.collideConnected = true;
-            md.maxForce = 1000.0f * _player1Body->GetMass();
+            md.maxForce = 100000.0f * _player1Body->GetMass();
+            md.dampingRatio = 0;
+            md.frequencyHz = 1000;
             
             _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
             _player1Body->SetAwake(true);
@@ -325,7 +412,9 @@ void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event
             md.bodyB = _player2Body;
             md.target = locationWorld;
             md.collideConnected = true;
-            md.maxForce = 1000.0f * _player2Body->GetMass();
+            md.maxForce = 100000.0f * _player2Body->GetMass();
+            md.dampingRatio = 0;
+            md.frequencyHz = 1000;
             
             _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
             _player2Body->SetAwake(true);
@@ -349,6 +438,66 @@ void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 }
 
 void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event) {
+    if (_mouseJoint) {
+        world->DestroyJoint(_mouseJoint);
+        _mouseJoint = NULL;
+    }
+}
+
+void HelloWorld::playerScore(int player) {
+    SimpleAudioEngine::sharedEngine()->playEffect("score.wav");
+    char scoreBuff[10];
+    
+    if (player == 1) {
+        _player1Score++;
+        _sc1Tens = _player1Score % 10;
+        _sc1SingleDigit = _player1Score / 10;
+        sprintf(scoreBuff, "%d.png", _sc1Tens);
+        CCSprite *tens = CCSprite::createWithSpriteFrameName(scoreBuff);
+        _player1ScoreLabel1->setTextureRect(tens->getTextureRect());
+        _player1ScoreLabel1->setTexture(tens->getTexture());
+        sprintf(scoreBuff, "%d.png", _sc1SingleDigit);
+        CCSprite *singleDigit = CCSprite::createWithSpriteFrameName(scoreBuff);
+        _player1ScoreLabel2->setTextureRect(singleDigit->getTextureRect());
+        _player1ScoreLabel2->setTexture(singleDigit->getTexture());
+        
+        
+        _ballBody->SetLinearVelocity(b2Vec2(0, 0));
+        _ballBody->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
+                                       (_screenSize.height/2 +
+                                        _ball->getContentSize().width/2)/PTM_RATIO), 0);
+    }
+    if (player == 2) {
+        _player2Score++;
+        _sc2Tens = _player2Score % 10;
+        _sc2SingleDigit = _player2Score / 10;
+        sprintf(scoreBuff, "%d.png", _sc2Tens);
+        CCSprite *tens = CCSprite::createWithSpriteFrameName(scoreBuff);
+        _player2ScoreLabel1->setTextureRect(tens->getTextureRect());
+        _player2ScoreLabel1->setTexture(tens->getTexture());
+        sprintf(scoreBuff, "%d.png", _sc2SingleDigit);
+        CCSprite *singleDigit = CCSprite::createWithSpriteFrameName(scoreBuff);
+        _player2ScoreLabel2->setTextureRect(singleDigit->getTextureRect());
+        _player2ScoreLabel2->setTexture(singleDigit->getTexture());
+        
+        _ballBody->SetLinearVelocity(b2Vec2(0, 0));
+        _ballBody->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
+                                       (_screenSize.height/2 -
+                                        _ball->getContentSize().width/2)/PTM_RATIO), 0);
+    }
+    
+}
+
+void HelloWorld::gameReset(){
+    _player1Body->SetLinearVelocity(b2Vec2(0, 0));
+    _player1Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
+                                      _player1->getContentSize().width/PTM_RATIO), 0);
+    
+    _player2Body->SetLinearVelocity(b2Vec2(0, 0));
+    _player2Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
+                                      (_screenSize.height -
+                                       _player2->getContentSize().width)/PTM_RATIO), 0);
+    
     if (_mouseJoint) {
         world->DestroyJoint(_mouseJoint);
         _mouseJoint = NULL;

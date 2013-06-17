@@ -38,7 +38,10 @@ public:
     void initPhysics();
     // adds a new sprite at a given coordinate
     void addNewSpriteAtPosition(cocos2d::CCPoint p);
-
+    void gameReset();
+    void playerScore(int player);
+    
+    
     virtual void draw();
     virtual void ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
     virtual void ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
@@ -47,6 +50,7 @@ public:
     void update(float dt);
     
 private:
+    CCSize s = CCDirector::sharedDirector()->getWinSize();
     b2Body* _groundBody;
     b2Body *_player1Body;
     b2Body *_player2Body;
@@ -63,11 +67,20 @@ private:
     CCSprite *_player2;
     CCSprite *_ball;
     
-    CCLabelTTF *_player1ScoreLabel;
-    CCLabelTTF *_player2ScoreLabel;
+    CCSprite *_player1ScoreLabel1;
+    CCSprite *_player1ScoreLabel2;
+    CCSprite *_player2ScoreLabel1;
+    CCSprite *_player2ScoreLabel2;
     
-    int _player1Score;
-    int _player2Score;
+    int _player1Score = 0;
+    int _sc1Tens;
+    int _sc1SingleDigit;
+    int _player2Score = 0;
+    int _sc2Tens;
+    int _sc2SingleDigit;
+    
+    bool p1touched = false;
+    bool p2touched = false;
     
     CCArray *_players;
     
