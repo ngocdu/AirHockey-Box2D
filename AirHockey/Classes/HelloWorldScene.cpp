@@ -110,9 +110,9 @@ HelloWorld::HelloWorld()
         CCLOG("radius2: %f", m_radius1);
     circle1.m_radius = m_radius1/PTM_RATIO;
     player1FixtureDef.shape = &circle1;
-    player1FixtureDef.density = 100.0f;
-    player1FixtureDef.friction = 10.0f;
-    player1FixtureDef.restitution = 1.0f;
+    player1FixtureDef.density = 10.0f;
+    player1FixtureDef.friction = 1.0f;
+    player1FixtureDef.restitution = 2.0f;
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
     
     
@@ -134,9 +134,9 @@ HelloWorld::HelloWorld()
     CCLOG("radius2: %f", m_radius2);
     circle2.m_radius = m_radius2/PTM_RATIO;
     player2FixtureDef.shape = &circle2;
-    player2FixtureDef.density = 100.0f;
-    player2FixtureDef.friction = 10.0f;
-    player2FixtureDef.restitution = 1.0f;
+    player2FixtureDef.density = 10.0f;
+    player2FixtureDef.friction = 1.0f;
+    player2FixtureDef.restitution = 2.0f;
     _player2Fixture = _player2Body->CreateFixture(&player2FixtureDef);
     
     
@@ -155,8 +155,8 @@ HelloWorld::HelloWorld()
     float m_radius3 = _ball->getContentSize().height/2;
     circle3.m_radius = m_radius3/PTM_RATIO;
     ballFixtureDef.shape = &circle3;
-    ballFixtureDef.density = 0.0f;
-    ballFixtureDef.friction = 1.0f;
+    ballFixtureDef.density = 1.0f;
+    ballFixtureDef.friction = 20.0f;
     ballFixtureDef.restitution = 0.5f;
     ballFixtureDef.filter.groupIndex = -10;
     _ballFixture = _ballBody->CreateFixture(&ballFixtureDef);
