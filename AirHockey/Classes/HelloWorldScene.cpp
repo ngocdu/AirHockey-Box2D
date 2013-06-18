@@ -111,7 +111,7 @@ HelloWorld::HelloWorld()
     player1FixtureDef.shape = &circle1;
     player1FixtureDef.density = 10.0f;
     player1FixtureDef.friction = 1.0f;
-    player1FixtureDef.restitution = 2.0f;
+    player1FixtureDef.restitution = -10.0f;
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
     
     
@@ -135,7 +135,7 @@ HelloWorld::HelloWorld()
     player2FixtureDef.shape = &circle2;
     player2FixtureDef.density = 10.0f;
     player2FixtureDef.friction = 1.0f;
-    player2FixtureDef.restitution = 2.0f;
+    player2FixtureDef.restitution = -10.0f;
     _player2Fixture = _player2Body->CreateFixture(&player2FixtureDef);
     
     
@@ -171,13 +171,13 @@ HelloWorld::HelloWorld()
     _player1ScoreLabel1 = CCSprite::createWithSpriteFrameName("0.png");
     _player1ScoreLabel1->setScale(0.7);
     _player1ScoreLabel1->setPosition(ccp(_screenSize.width - 115,
-                                        _screenSize.height * 0.5 - 130));
+                                        _screenSize.height * 0.5 - 125));
     _player1ScoreLabel1->setRotation(90);
     this->addChild(_player1ScoreLabel1);
     _player1ScoreLabel2 = CCSprite::createWithSpriteFrameName("0.png");
     _player1ScoreLabel2->setScale(0.7);
     _player1ScoreLabel2->setPosition(ccp(_screenSize.width - 115,
-                                         _screenSize.height * 0.5 - 100));
+                                         _screenSize.height * 0.5 - 95));
     _player1ScoreLabel2->setRotation(90);
     this->addChild(_player1ScoreLabel2);
     
@@ -212,31 +212,17 @@ void HelloWorld::initPhysics()
     b2Vec2 gravity;
     gravity.Set(0.0f, 0.0f);
     world = new b2World(gravity);
-
-    // Do we want to let bodies sleep?
     world->SetAllowSleeping(true);
-
     world->SetContinuousPhysics(true);
 
-//     m_debugDraw = new GLESDebugDraw( PTM_RATIO );
-//     world->SetDebugDraw(m_debugDraw);
 
     uint32 flags = 0;
     flags += b2Draw::e_shapeBit;
-    //        flags += b2Draw::e_jointBit;
-    //        flags += b2Draw::e_aabbBit;
-    //        flags += b2Draw::e_pairBit;
-    //        flags += b2Draw::e_centerOfMassBit;
-    //m_debugDraw->SetFlags(flags);
 
 
     // Define the ground body.
     b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0, 0); // bottom-left corner
-
-    // Call the body factory which allocates memory for the ground body
-    // from a pool and creates the ground box shape (also from a pool).
-    // The body is also added to the world.
+    groundBodyDef.position.Set(0, 0);
     _groundBody = world->CreateBody(&groundBodyDef);
 
     // Define the ground box shape.
@@ -445,8 +431,10 @@ void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event
                 player = (GameSprite*)_players->objectAtIndex(p);
                 if (player->getTouch() != NULL && player->getTouch() == touch) {
                     b2Vec2 locationWorld = b2Vec2(tap.x / PTM_RATIO, tap.y / PTM_RATIO);
-                    if (p == 0) _mouseJoint1->SetTarget(locationWorld);
-                    if (p == 1) _mouseJoint2->SetTarget(locationWorld);
+                    if (p == 0 && _mouseJoint1 != NULL)
+                        _mouseJoint1->SetTarget(locationWorld);
+                    if (p == 1 && _mouseJoint2 != NULL)
+                        _mouseJoint2->SetTarget(locationWorld);
                 }
             }
         }
