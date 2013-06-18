@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "Box2D.h"
 #include "MyContactListener.h"
+#include "GameSprite.h"
 
 USING_NS_CC;
 
@@ -87,7 +88,9 @@ private:
     b2World* world;
     cocos2d::CCTexture2D* m_pSpriteTexture; // weak ref
     
-    b2MouseJoint *_mouseJoint;
+    b2MouseJoint *_mouseJoint1;
+    b2MouseJoint *_mouseJoint2;
+    
     MyContactListener *_contactListener;
 };
 
