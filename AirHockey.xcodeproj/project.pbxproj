@@ -24,6 +24,8 @@
 		0F729FF1176EE8D6000FE6E7 /* counter.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FEF176EE8D6000FE6E7 /* counter.plist */; };
 		0F729FF2176EE8D6000FE6E7 /* counter.pvr.ccz in Resources */ = {isa = PBXBuildFile; fileRef = 0F729FF0176EE8D6000FE6E7 /* counter.pvr.ccz */; };
 		0F729FF5176F0198000FE6E7 /* GameSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F729FF3176F0198000FE6E7 /* GameSprite.cpp */; };
+		0F9BE40D177032E5002DAABB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F9BE40C177032E4002DAABB /* Default@2x.png */; };
+		0F9BE41117703CE7002DAABB /* hitPuck.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0F9BE41017703CE6002DAABB /* hitPuck.wav */; };
 		0FA83DF81768807300A04769 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DF71768807300A04769 /* QuartzCore.framework */; };
 		0FA83DFA1768807300A04769 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DF91768807300A04769 /* OpenGLES.framework */; };
 		0FA83DFC1768807300A04769 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA83DFB1768807300A04769 /* OpenAL.framework */; };
@@ -322,6 +324,8 @@
 		0F729FF0176EE8D6000FE6E7 /* counter.pvr.ccz */ = {isa = PBXFileReference; lastKnownFileType = file; path = counter.pvr.ccz; sourceTree = "<group>"; };
 		0F729FF3176F0198000FE6E7 /* GameSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameSprite.cpp; path = Classes/GameSprite.cpp; sourceTree = "<group>"; };
 		0F729FF4176F0198000FE6E7 /* GameSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameSprite.h; path = Classes/GameSprite.h; sourceTree = "<group>"; };
+		0F9BE40C177032E4002DAABB /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Default@2x.png"; sourceTree = "<group>"; };
+		0F9BE41017703CE6002DAABB /* hitPuck.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = hitPuck.wav; path = Resources/sound/hitPuck.wav; sourceTree = "<group>"; };
 		0FA83DF41768807300A04769 /* AirHockey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirHockey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FA83DF71768807300A04769 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0FA83DF91768807300A04769 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1024,6 +1028,8 @@
 		0FA83E081768807300A04769 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0F9BE41017703CE6002DAABB /* hitPuck.wav */,
+				0F9BE40C177032E4002DAABB /* Default@2x.png */,
 				0F729FEE176EE8D6000FE6E7 /* packed */,
 				0F729FE9176EC1EE000FE6E7 /* sound */,
 				0F729FE3176EB7CB000FE6E7 /* ball_2.png */,
@@ -2248,6 +2254,8 @@
 				0F729FED176EC1EE000FE6E7 /* score.wav in Resources */,
 				0F729FF1176EE8D6000FE6E7 /* counter.plist in Resources */,
 				0F729FF2176EE8D6000FE6E7 /* counter.pvr.ccz in Resources */,
+				0F9BE40D177032E5002DAABB /* Default@2x.png in Resources */,
+				0F9BE41117703CE7002DAABB /* hitPuck.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

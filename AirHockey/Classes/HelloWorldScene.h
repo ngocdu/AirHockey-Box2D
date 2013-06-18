@@ -41,7 +41,7 @@ public:
     void addNewSpriteAtPosition(cocos2d::CCPoint p);
     void gameReset();
     void playerScore(int player);
-    
+    void createEdge(float x1, float y1, float x2, float y2, int groupIndex);
     
     virtual void draw();
     virtual void ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
@@ -64,8 +64,8 @@ private:
     b2Fixture *lowerMiddle;
     b2Fixture *higherMiddle;
     
-    CCSprite *_player1;
-    CCSprite *_player2;
+    GameSprite *_player1;
+    GameSprite *_player2;
     CCSprite *_ball;
     
     CCSprite *_player1ScoreLabel1;
