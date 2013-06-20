@@ -78,8 +78,8 @@ HelloWorld::HelloWorld()
 
     //------------------Time init--------------------------------------
     CCSize size = CCDirector::sharedDirector()->getWinSize();
-    this->minutes=0;
-    this->seconds=0;
+    this->minutes=2;
+    this->seconds=60;
     this->playing = true;
     
     char strTime[20] = {0};
@@ -513,18 +513,20 @@ CCScene* HelloWorld::scene()
 
 void HelloWorld::updateTime(float dt)
 {
-    if(playing==true && minutes<3)
+    if(playing==true && minutes >=0)
 	{
-		if(seconds<60)	seconds++;
+		if(seconds>0)	seconds--;
 		else
 		{
-			if(minutes<60)
-				minutes++;
+			if(minutes>0)
+            {
+				minutes--;
+            }
 			else
 			{
 				minutes=0;
 			}
-			seconds=0;
+			seconds=60;
 		}
 	}
     
@@ -540,7 +542,7 @@ void HelloWorld::updateTime(float dt)
 	texTime->initWithString(strTime,"Times New Roman",34);
 	spriteTime->setTexture(texTime);
     
-    if (minutes == 3) {
+    if (minutes == 0 && seconds == 0) {
         this->unscheduleAllSelectors();
         this->unscheduleUpdate();
     }
