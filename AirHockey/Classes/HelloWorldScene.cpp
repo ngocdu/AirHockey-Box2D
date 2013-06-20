@@ -76,6 +76,30 @@ HelloWorld::HelloWorld()
     // init physics
     this->initPhysics();
 
+    //------------------Time init--------------------------------------
+    CCSize size = CCDirector::sharedDirector()->getWinSize();
+    this->minutes=0;
+    this->seconds=0;
+    this->playing = true;
+    
+    char strTime[20] = {0};
+	sprintf(strTime, "0%i:0%i",minutes,seconds);
+
+	CCTexture2D *texTime=new CCTexture2D();
+	texTime->initWithString(strTime,"Times New Roman",34);
+	spriteTime=CCSprite::createWithTexture(texTime);
+	spriteTime->setPosition(ccp(145/2,size.height * 0.5));
+    spriteTime->setScale(1.4);
+    
+    CCRotateTo *rotate = CCRotateTo::create(0,90*3);
+    spriteTime->runAction(rotate);
+	//spriteTime->setColor(ccc3(0,50,50));
+	this->addChild(spriteTime,10);
+    
+    this->schedule(schedule_selector(HelloWorld::updateTime), 1);
+    //-----------------------------------------------------------------
+    
+    
     CCSpriteBatchNode *parent = CCSpriteBatchNode::create("blocks.png", 100);
     m_pSpriteTexture = parent->getTexture();
 
@@ -271,38 +295,40 @@ void HelloWorld::draw()
 
 void HelloWorld::update(float dt)
 {
-    
-    int velocityIterations = 8;
-    int positionIterations = 3;
-    
-    
-    // Instruct the world to perform a single step of simulation. It is
-    // generally best to keep the time step and iterations fixed.
-    world->Step(dt, velocityIterations, positionIterations);
-    
-    //Iterate over the bodies in the physics world
-    for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
-    {
-        if (b->GetUserData() != NULL) {
-            CCSprite* myActor = (CCSprite*)b->GetUserData();
-            myActor->setPosition( CCPointMake( b->GetPosition().x * PTM_RATIO,
-                                              b->GetPosition().y * PTM_RATIO) );
-            if (myActor->getTag() == 99) {
-                b->SetLinearVelocity(b2Vec2(0, 0));
-                b->SetFixedRotation(true);
+    if (this->playing == true) {
+        int velocityIterations = 8;
+        int positionIterations = 3;
+        
+        
+        // Instruct the world to perform a single step of simulation. It is
+        // generally best to keep the time step and iterations fixed.
+        world->Step(dt, velocityIterations, positionIterations);
+        
+        //Iterate over the bodies in the physics world
+        for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
+        {
+            if (b->GetUserData() != NULL) {
+                CCSprite* myActor = (CCSprite*)b->GetUserData();
+                myActor->setPosition( CCPointMake( b->GetPosition().x * PTM_RATIO,
+                                                  b->GetPosition().y * PTM_RATIO) );
+                if (myActor->getTag() == 99) {
+                    b->SetLinearVelocity(b2Vec2(0, 0));
+                    b->SetFixedRotation(true);
+                }
+                
             }
-            
         }
-    }
-    
-    if (_ball->getPositionY() >= s.height-55) {
-        HelloWorld::playerScore(1);
-        HelloWorld::gameReset();
-    }
-    
-    if (_ball->getPositionY() <= 55) {
-        HelloWorld::playerScore(2);
-        HelloWorld::gameReset();
+        
+        if (_ball->getPositionY() >= s.height-55) {
+            HelloWorld::playerScore(1);
+            HelloWorld::gameReset();
+        }
+        
+        if (_ball->getPositionY() <= 55) {
+            HelloWorld::playerScore(2);
+            HelloWorld::gameReset();
+        }
+
     }
 }
 
@@ -455,7 +481,11 @@ void HelloWorld::playerScore(int player) {
     
 }
 
-void HelloWorld::gameReset(){
+void HelloWorld::gameReset()
+{
+    this->playing = true;
+//    this->minutes = 0;
+//    this->seconds = 0;
     _player1Body->SetLinearVelocity(b2Vec2(0, 0));
     _player1Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
                                       _player1->getContentSize().width/PTM_RATIO), 0);
@@ -486,4 +516,39 @@ CCScene* HelloWorld::scene()
     layer->release();
     
     return scene;
+}
+
+void HelloWorld::updateTime(float dt)
+{
+    if(playing==true && minutes<3)
+	{
+		if(seconds<60)	seconds++;
+		else
+		{
+			if(minutes<60)
+				minutes++;
+			else
+			{
+				minutes=0;
+			}
+			seconds=0;
+		}
+	}
+    
+	char strTime[20] = {0}; //khong duoc xoa hai dong nay de lan sau con dung
+	if(minutes<10&&seconds<10)
+        sprintf(strTime, "0%i:0%i",minutes,seconds);
+	else if(minutes<10&&seconds>=10)
+        sprintf(strTime, "0%i:%i",minutes,seconds);
+    
+    
+	CCTexture2D *texTime=new CCTexture2D();
+    
+	texTime->initWithString(strTime,"Times New Roman",34);
+	spriteTime->setTexture(texTime);
+    
+    if (minutes == 3) {
+        this->unscheduleAllSelectors();
+        this->unscheduleUpdate();
+    }
 }

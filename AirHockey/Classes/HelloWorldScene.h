@@ -50,6 +50,8 @@ public:
     
     void update(float dt);
     
+    void updateTime(float dt);
+    
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
     b2Body* _groundBody;
@@ -92,6 +94,11 @@ private:
     b2MouseJoint *_mouseJoint2;
     
     MyContactListener *_contactListener;
+    
+    int minutes;
+	int seconds;
+    bool playing;
+	cocos2d:: CCSprite *spriteTime ;
 };
 
 #endif // __HELLO_WORLD_H__
