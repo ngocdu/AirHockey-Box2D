@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "AirHockey/Classes/HelloWorldScene.cpp"
-         timestampString = "393228075.390005"
+         timestampString = "393317084.25023"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "163"
-         endingLineNumber = "163"
+         startingLineNumber = "170"
+         endingLineNumber = "170"
          landmarkName = "HelloWorld::HelloWorld()"
          landmarkType = "5">
       </FileBreakpoint>
@@ -47,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "AirHockey/Classes/HelloWorldScene.cpp"
-         timestampString = "393222872.286074"
+         timestampString = "393317084.25023"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "158"
-         endingLineNumber = "158"
+         startingLineNumber = "165"
+         endingLineNumber = "165"
          landmarkName = "HelloWorld::HelloWorld()"
          landmarkType = "5">
       </FileBreakpoint>
@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "AirHockey/Classes/HelloWorldScene.cpp"
-         timestampString = "393232118.913055"
+         timestampString = "393317084.25023"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "370"
-         endingLineNumber = "370"
+         startingLineNumber = "377"
+         endingLineNumber = "377"
          landmarkName = "HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event)"
          landmarkType = "5">
       </FileBreakpoint>

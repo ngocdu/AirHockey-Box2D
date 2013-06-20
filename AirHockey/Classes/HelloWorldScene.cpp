@@ -92,14 +92,15 @@ HelloWorld::HelloWorld()
     
     _player1 = GameSprite::gameSpriteWidthFile("player1.png");
     _player1->setTag(99);
-    _player1->setPosition(ccp(_screenSize.width * 0.5,
-                              _player1->getContentSize().width));
+//    _player1->setPosition(ccp(_screenSize.width * 0.5,
+//                              _player1->getContentSize().width));
     this->addChild(_player1, 1);
     b2BodyDef player1BodyDef;
     player1BodyDef.type = b2_dynamicBody;
     player1BodyDef.position.Set(_screenSize.width * 0.5 / PTM_RATIO,
                                 _player1->getContentSize().width / PTM_RATIO );
     player1BodyDef.userData = _player1;
+    player1BodyDef.linearDamping =5.0f;
     _player1Body = world->CreateBody(&player1BodyDef);
     b2FixtureDef player1FixtureDef;
     b2CircleShape circle1;
@@ -107,13 +108,15 @@ HelloWorld::HelloWorld()
         CCLOG("radius2: %f", m_radius1);
     circle1.m_radius = m_radius1/PTM_RATIO;
     player1FixtureDef.shape = &circle1;
-    player1FixtureDef.density = 10.0f;
+    player1FixtureDef.density = 1.1f;
+    player1FixtureDef.friction = 0.3f;
+    player1FixtureDef.restitution = 0.0f;
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
     
     
     _player2 = GameSprite::gameSpriteWidthFile("player2.png");
-    _player2->setPosition(ccp(_screenSize.width * 0.5,
-                              _screenSize.height - _player1->getContentSize().width));
+//    _player2->setPosition(ccp(_screenSize.width * 0.5,
+//                              _screenSize.height - _player1->getContentSize().width));
     _player2->setTag(99);
     this->addChild(_player2, 1);
     b2BodyDef player2BodyDef;
@@ -122,23 +125,26 @@ HelloWorld::HelloWorld()
                                 (_screenSize.height -
                                  _player2->getContentSize().width) / PTM_RATIO);
     player2BodyDef.userData = _player2;
+    player2BodyDef.linearDamping =5.0f;
     _player2Body = world->CreateBody(&player2BodyDef);
     b2FixtureDef player2FixtureDef;
     b2CircleShape circle2;
     float m_radius2 = _player2->getContentSize().height/2;
     circle2.m_radius = m_radius2/PTM_RATIO;
     player2FixtureDef.shape = &circle2;
-    player2FixtureDef.density = 10.0f;
+    player2FixtureDef.density = 1.1f;
+    player2FixtureDef.friction = 0.3f;
+    player2FixtureDef.restitution=  0.0f;
     _player2Fixture = _player2Body->CreateFixture(&player2FixtureDef);
     
     
     _ball = CCSprite::create("ball.png");
-    _ball->setPosition(ccp(_screenSize.width * 0.5,
-                           _screenSize.height * 0.5 -_ball->getContentSize().width/2));
+//    _ball->setPosition(ccp(_screenSize.width * 0.5,
+//                           _screenSize.height * 0.5 -_ball->getContentSize().width/2));
     this->addChild(_ball, 1, 10);
     b2BodyDef ballBodyDef;
     ballBodyDef.type = b2_dynamicBody;
-    ballBodyDef.linearDamping = 0.7f;
+    ballBodyDef.linearDamping = 0.3f;
     ballBodyDef.position.Set(_screenSize.width/2/PTM_RATIO,
                              _screenSize.height/2/PTM_RATIO);
     ballBodyDef.userData = _ball;
@@ -148,7 +154,8 @@ HelloWorld::HelloWorld()
     float m_radius3 = _ball->getContentSize().height/2;
     circle3.m_radius = m_radius3/PTM_RATIO;
     ballFixtureDef.shape = &circle3;
-    ballFixtureDef.density = 5.0f;
+    ballFixtureDef.density = 1.0f;
+    ballFixtureDef.friction = 0.2f;
     ballFixtureDef.restitution = 1.0f;
     ballFixtureDef.filter.groupIndex = -10;
     _ballFixture = _ballBody->CreateFixture(&ballFixtureDef);
