@@ -464,7 +464,7 @@ void HelloWorld::gameReset(){
     _player2Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
                                       (_screenSize.height -
                                        _player2->getContentSize().width)/PTM_RATIO), 0);
-    
+
     if (_mouseJoint1) {
         world->DestroyJoint(_mouseJoint1);
         _mouseJoint1 = NULL;
