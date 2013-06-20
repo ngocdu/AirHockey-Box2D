@@ -303,6 +303,7 @@
 		0FA841A11768808600A04769 /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FA841A01768808600A04769 /* HelloWorldScene.cpp */; };
 		0FA841A31768808700A04769 /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = 0FA841A21768808700A04769 /* blocks.png */; };
 		0FB5B2E61769792D00E2A745 /* MyContactListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5B2E41769792D00E2A745 /* MyContactListener.cpp */; };
+		DCF4F78B1772C9C0003E6EB0 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCF4F78A1772C9C0003E6EB0 /* libcurl.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -924,6 +925,7 @@
 		0FA841A21768808700A04769 /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blocks.png; path = Resources/blocks.png; sourceTree = "<group>"; };
 		0FB5B2E41769792D00E2A745 /* MyContactListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MyContactListener.cpp; path = Classes/MyContactListener.cpp; sourceTree = "<group>"; };
 		0FB5B2E51769792D00E2A745 /* MyContactListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyContactListener.h; path = Classes/MyContactListener.h; sourceTree = "<group>"; };
+		DCF4F78A1772C9C0003E6EB0 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcurl.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -941,6 +943,7 @@
 				0FA83E061768807300A04769 /* CoreGraphics.framework in Frameworks */,
 				0FA83F6A1768807C00A04769 /* libcurl.a in Frameworks */,
 				0FA83F6C1768807C00A04769 /* libwebp.a in Frameworks */,
+				DCF4F78B1772C9C0003E6EB0 /* libcurl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1001,6 +1004,7 @@
 		0FA83DF61768807300A04769 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DCF4F78A1772C9C0003E6EB0 /* libcurl.a */,
 				0FA83DF71768807300A04769 /* QuartzCore.framework */,
 				0FA83DF91768807300A04769 /* OpenGLES.framework */,
 				0FA83DFB1768807300A04769 /* OpenAL.framework */,
@@ -2608,6 +2612,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/AirHockey/libs/cocos2dx/platform/third_party/ios/libraries\"",
+					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -2637,6 +2642,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/AirHockey/libs/cocos2dx/platform/third_party/ios/libraries\"",
+					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
