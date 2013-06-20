@@ -91,18 +91,15 @@ HelloWorld::HelloWorld()
     court->setPosition(ccp(_screenSize.width * 0.5, _screenSize.height * 0.5));
     this->addChild(court);
     
-    _player1 = CCSprite::create("player1_2.png");
+    _player1 = CCSprite::create("player1.png");
     _player1->setTag(99);
-    _player1->setPosition(ccp(_screenSize.width * 0.5,
-                              _player1->getContentSize().width));
     this->addChild(_player1, 1);
     b2BodyDef player1BodyDef;
     player1BodyDef.type = b2_dynamicBody;
     player1BodyDef.position.Set(_screenSize.width * 0.5 / PTM_RATIO,
                                 _player1->getContentSize().width / PTM_RATIO );
     player1BodyDef.userData = _player1;
-    player1BodyDef.linearDamping = 0.0f;
-    player1BodyDef.angularDamping = 0.0f;
+    player1BodyDef.linearDamping = 5.0f;
     _player1Body = world->CreateBody(&player1BodyDef);
     b2FixtureDef player1FixtureDef;
     b2CircleShape circle1;
@@ -110,15 +107,13 @@ HelloWorld::HelloWorld()
         CCLOG("radius2: %f", m_radius1);
     circle1.m_radius = m_radius1/PTM_RATIO;
     player1FixtureDef.shape = &circle1;
-    player1FixtureDef.density = 100.0f;
-    player1FixtureDef.friction = 10.0f;
-    player1FixtureDef.restitution = 1.0f;
+    player1FixtureDef.density = 1.1f;
+    player1FixtureDef.friction = 0.3f;
+    player1FixtureDef.restitution = 0.0f;
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
     
     
-    _player2 = CCSprite::create("player2_2.png");
-    _player2->setPosition(ccp(_screenSize.width * 0.5,
-                              _screenSize.height - _player1->getContentSize().width));
+    _player2 = CCSprite::create("player2.png");
     _player2->setTag(99);
     this->addChild(_player2, 1);
     b2BodyDef player2BodyDef;
@@ -127,6 +122,7 @@ HelloWorld::HelloWorld()
                                 (_screenSize.height -
                                  _player2->getContentSize().width) / PTM_RATIO);
     player2BodyDef.userData = _player2;
+    player2BodyDef.linearDamping = 5.0f;
     _player2Body = world->CreateBody(&player2BodyDef);
     b2FixtureDef player2FixtureDef;
     b2CircleShape circle2;
@@ -134,18 +130,17 @@ HelloWorld::HelloWorld()
     CCLOG("radius2: %f", m_radius2);
     circle2.m_radius = m_radius2/PTM_RATIO;
     player2FixtureDef.shape = &circle2;
-    player2FixtureDef.density = 100.0f;
-    player2FixtureDef.friction = 10.0f;
-    player2FixtureDef.restitution = 1.0f;
+    player2FixtureDef.density = 1.1f;
+    player2FixtureDef.friction = 0.3f;
+    player2FixtureDef.restitution=  0.0f;
     _player2Fixture = _player2Body->CreateFixture(&player2FixtureDef);
     
     
-    _ball = CCSprite::create("ball_2.png");
-    _ball->setPosition(ccp(_screenSize.width * 0.5,
-                           _screenSize.height * 0.5 -_ball->getContentSize().width/2));
+    _ball = CCSprite::create("ball.png");
     this->addChild(_ball, 1, 10);
     b2BodyDef ballBodyDef;
     ballBodyDef.type = b2_dynamicBody;
+    ballBodyDef.linearDamping = 0.3f;
     ballBodyDef.position.Set(_screenSize.width/2/PTM_RATIO,
                              _screenSize.height/2/PTM_RATIO);
     ballBodyDef.userData = _ball;
@@ -155,9 +150,9 @@ HelloWorld::HelloWorld()
     float m_radius3 = _ball->getContentSize().height/2;
     circle3.m_radius = m_radius3/PTM_RATIO;
     ballFixtureDef.shape = &circle3;
-    ballFixtureDef.density = 0.0f;
-    ballFixtureDef.friction = 1.0f;
-    ballFixtureDef.restitution = 0.5f;
+    ballFixtureDef.density = 1.0f;
+    ballFixtureDef.friction = 0.2f;
+    ballFixtureDef.restitution = 1.0f;
     ballFixtureDef.filter.groupIndex = -10;
     _ballFixture = _ballBody->CreateFixture(&ballFixtureDef);
     
@@ -209,115 +204,47 @@ HelloWorld::~HelloWorld()
 
 void HelloWorld::initPhysics()
 {
-
     b2Vec2 gravity;
     gravity.Set(0.0f, 0.0f);
     world = new b2World(gravity);
-
-    // Do we want to let bodies sleep?
     world->SetAllowSleeping(true);
-
     world->SetContinuousPhysics(true);
-
-//     m_debugDraw = new GLESDebugDraw( PTM_RATIO );
-//     world->SetDebugDraw(m_debugDraw);
-
+    
+    
     uint32 flags = 0;
     flags += b2Draw::e_shapeBit;
-    //        flags += b2Draw::e_jointBit;
-    //        flags += b2Draw::e_aabbBit;
-    //        flags += b2Draw::e_pairBit;
-    //        flags += b2Draw::e_centerOfMassBit;
-    //m_debugDraw->SetFlags(flags);
-
-
-    // Define the ground body.
+    
     b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0, 0); // bottom-left corner
-
-    // Call the body factory which allocates memory for the ground body
-    // from a pool and creates the ground box shape (also from a pool).
-    // The body is also added to the world.
+    groundBodyDef.position.Set(0, 0);
     _groundBody = world->CreateBody(&groundBodyDef);
-
-    // Define the ground box shape.
-    b2EdgeShape groundBox;
-
-    // bottom_left
-    groundBox.Set(b2Vec2(0, 70/PTM_RATIO),
-                  b2Vec2(260/PTM_RATIO, 70/PTM_RATIO));
-    _groundBody->CreateFixture(&groundBox, 0);
     
-    // bottom_right
-    groundBox.Set(b2Vec2((s.width-260)/PTM_RATIO, 70/PTM_RATIO),
-                  b2Vec2(s.width/PTM_RATIO, 70/PTM_RATIO));
-    _groundBody->CreateFixture(&groundBox, 0);
-    
-    //bottom_middle
-    groundBox.Set(b2Vec2(260/PTM_RATIO, 70/PTM_RATIO),
-                  b2Vec2((s.width-260)/PTM_RATIO, 70/PTM_RATIO));
-    b2FixtureDef bottomMiddleDef;
-    bottomMiddleDef.shape = &groundBox;
-    bottomMiddleDef.filter.groupIndex = -10;
-    _groundBody->CreateFixture(&bottomMiddleDef);
-
-    // bottom_middle1
-    groundBox.Set(b2Vec2(260/PTM_RATIO, 70/PTM_RATIO),
-                  b2Vec2(260/PTM_RATIO, 0));
-    _groundBody->CreateFixture(&groundBox, 0);
-    
-    // bottom_middle2
-    groundBox.Set(b2Vec2((s.width-260)/PTM_RATIO, 70/PTM_RATIO),
-                  b2Vec2((s.width-260)/PTM_RATIO, 0));
-    _groundBody->CreateFixture(&groundBox, 0);
-    
-    // top_left
-    groundBox.Set(b2Vec2(0,(s.height-70)/PTM_RATIO),
-                  b2Vec2(260/PTM_RATIO,(s.height-70)/PTM_RATIO));
-    _groundBody->CreateFixture(&groundBox, 0);
-    
-    // top_right
-    groundBox.Set(b2Vec2((s.width-260)/PTM_RATIO,(s.height-70)/PTM_RATIO),
-                  b2Vec2(s.width/PTM_RATIO,(s.height-70)/PTM_RATIO));
-    _groundBody->CreateFixture(&groundBox, 0);
-    
-    //top_middle
-    groundBox.Set(b2Vec2(260/PTM_RATIO, (s.height-70)/PTM_RATIO),
-                  b2Vec2((s.width-260)/PTM_RATIO, (s.height-70)/PTM_RATIO));
-    b2FixtureDef topMiddleDef;
-    topMiddleDef.shape = &groundBox;
-    topMiddleDef.filter.groupIndex = -10;
-    _groundBody->CreateFixture(&topMiddleDef);
-    
-    // top_middle1
-    groundBox.Set(b2Vec2(260/PTM_RATIO,(s.height-70)/PTM_RATIO),
-                  b2Vec2(260/PTM_RATIO, s.height/PTM_RATIO));
-    _groundBody->CreateFixture(&groundBox, 0);
-    
-    // top_middle2
-    groundBox.Set(b2Vec2((s.width-260)/PTM_RATIO,(s.height-70)/PTM_RATIO),
-                  b2Vec2((s.width-260)/PTM_RATIO, s.height/PTM_RATIO));
-    _groundBody->CreateFixture(&groundBox, 0);
-    
-    // left
-    groundBox.Set(b2Vec2(55/PTM_RATIO,s.height/PTM_RATIO), b2Vec2(55/PTM_RATIO,0));
-    _groundBody->CreateFixture(&groundBox, 0);
-
-    // right
-    groundBox.Set(b2Vec2((s.width-45)/PTM_RATIO,s.height/PTM_RATIO),
-                  b2Vec2((s.width-45)/PTM_RATIO,0));
-    _groundBody->CreateFixture(&groundBox, 0);
-    
-    // middle
-    groundBox.Set(b2Vec2(0, s.height/2/PTM_RATIO),
-                  b2Vec2(s.width/PTM_RATIO, s.height/2/PTM_RATIO));
-    b2FixtureDef MiddleDef;
-    MiddleDef.shape = &groundBox;
-    MiddleDef.filter.groupIndex = -10;
-    _groundBody->CreateFixture(&MiddleDef);
-    
-
+    HelloWorld::createEdge(0, 70, 260, 70, 0);
+    HelloWorld::createEdge(s.width - 260, 70, s.width, 70, 0);
+    HelloWorld::createEdge(260, 70, s.width - 260, 70, -10);
+    HelloWorld::createEdge(260, 70, 260, 0, 0);
+    HelloWorld::createEdge(s.width - 260, 70, s.width - 260, 0, 0);
+    HelloWorld::createEdge(0, s.height - 70, 260, s.height - 70, 0);
+    HelloWorld::createEdge(s.width - 260, s.height - 70, s.width, s.height - 70, 0);
+    HelloWorld::createEdge(260, s.height - 70, s.width - 260, s.height - 70, -10);
+    HelloWorld::createEdge(260, s.height - 70, 260, s.height, 0);
+    HelloWorld::createEdge(s.width - 260, s.height - 70, s.width - 260, s.height, 0);
+    HelloWorld::createEdge(55, s.height, 55, 0, 0);
+    HelloWorld::createEdge(s.width - 45, s.height, s.width - 45, 0, 0);
+    HelloWorld::createEdge(0, s.height/2, s.width, s.height/2, -10);
 }
+
+void HelloWorld::createEdge(float x1, float y1,
+                            float x2, float y2,
+                            int groupIndex) {
+    b2EdgeShape groundEdgeShape;
+    groundEdgeShape.Set(b2Vec2(x1 / PTM_RATIO, y1 / PTM_RATIO),
+                        b2Vec2(x2 / PTM_RATIO, y2 / PTM_RATIO));
+    b2FixtureDef groundEdgeDef;
+    groundEdgeDef.shape = &groundEdgeShape;
+    groundEdgeDef.filter.groupIndex = groupIndex;
+    _groundBody->CreateFixture(&groundEdgeDef);
+}
+
 
 void HelloWorld::draw()
 {
@@ -384,61 +311,37 @@ void HelloWorld::update(float dt)
 }
 
 void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event){
-    CCSetIterator i;
+    if (_mouseJoint != NULL) return;
+    CCTouch *touch = (CCTouch*)touches->anyObject();
+    CCPoint tap = touch->getLocation();
+    b2Vec2 locationWorld = b2Vec2(tap.x / PTM_RATIO, tap.y / PTM_RATIO);
     
-    for (i = touches->begin(); i != touches->end(); i++) {
-        if (_mouseJoint != NULL) return;
-        CCTouch *touch = (CCTouch*)(*i);
-        CCPoint tap = touch->getLocation();
-
-        b2Vec2 locationWorld = b2Vec2(tap.x / PTM_RATIO, tap.y / PTM_RATIO);
+    if (_player1Fixture->TestPoint(locationWorld)) {
+        b2MouseJointDef md;
+        md.bodyA = _groundBody;
+        md.bodyB = _player1Body;
+        md.target = locationWorld;
+        md.collideConnected = true;
+        md.maxForce = 100000.0f * _player1Body->GetMass();
+        md.dampingRatio = 0;
+        md.frequencyHz = 1000;
         
-        if (_player1Fixture->TestPoint(locationWorld)) {
-            b2MouseJointDef md;
-            md.bodyA = _groundBody;
-            md.bodyB = _player1Body;
-            md.target = locationWorld;
-            md.collideConnected = true;
-            md.maxForce = 100000.0f * _player1Body->GetMass();
-            md.dampingRatio = 0;
-            md.frequencyHz = 1000;
-            
-            _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
-            _player1Body->SetAwake(true);
-        }
-        if (_player2Fixture->TestPoint(locationWorld)) {
-            b2MouseJointDef md;
-            md.bodyA = _groundBody;
-            md.bodyB = _player2Body;
-            md.target = locationWorld;
-            md.collideConnected = true;
-            md.maxForce = 100000.0f * _player2Body->GetMass();
-            md.dampingRatio = 0;
-            md.frequencyHz = 1000;
-            
-            _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
-            _player2Body->SetAwake(true);
-        }
+        _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
+        _player1Body->SetAwake(true);
     }
 }
 
 void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
-    CCSetIterator i;
-    
-    for (i = touches->begin(); i != touches->end(); i++) {
-        if (_mouseJoint == NULL) return;
-        
-        CCTouch  *myTouch = (CCTouch *)(*i);
-        CCPoint location = myTouch->getLocationInView();
-        location = CCDirector::sharedDirector()->convertToGL(location);
-        b2Vec2 locationWorld = b2Vec2(location.x / PTM_RATIO, location.y / PTM_RATIO);
-        
-        _mouseJoint->SetTarget(locationWorld);
-    }
+    if (_mouseJoint == NULL) return;
+    CCTouch  *myTouch = (CCTouch *)touches->anyObject();
+    CCPoint location = myTouch->getLocation();
+    b2Vec2 locationWorld = b2Vec2(location.x / PTM_RATIO, location.y / PTM_RATIO);
+    _mouseJoint->SetTarget(locationWorld);
+
 }
 
 void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event) {
-    if (_mouseJoint) {
+    if (_mouseJoint != NULL) {
         world->DestroyJoint(_mouseJoint);
         _mouseJoint = NULL;
     }

@@ -40,7 +40,7 @@ public:
     void addNewSpriteAtPosition(cocos2d::CCPoint p);
     void gameReset();
     void playerScore(int player);
-    
+    void createEdge(float x1, float y1, float x2, float y2, int groupIndex);
     
     virtual void draw();
     virtual void ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
