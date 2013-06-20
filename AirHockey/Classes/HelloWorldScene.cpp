@@ -78,23 +78,22 @@ HelloWorld::HelloWorld()
 
     //------------------Time init--------------------------------------
     CCSize size = CCDirector::sharedDirector()->getWinSize();
-    this->minutes=0;
-    this->seconds=0;
+    this->minutes = 2;
+    this->seconds = 60;
     this->playing = true;
     
     char strTime[20] = {0};
-	sprintf(strTime, "0%i:0%i",minutes,seconds);
+	sprintf(strTime, "0%i:0%i", minutes,seconds);
 
-	CCTexture2D *texTime=new CCTexture2D();
-	texTime->initWithString(strTime,"Times New Roman",34);
-	spriteTime=CCSprite::createWithTexture(texTime);
-	spriteTime->setPosition(ccp(145/2,size.height * 0.5));
+	CCTexture2D *texTime = new CCTexture2D();
+	texTime->initWithString(strTime, "Times New Roman", 34);
+	spriteTime = CCSprite::createWithTexture(texTime);
+	spriteTime->setPosition(ccp(145/2, size.height * 0.5));
     spriteTime->setScale(1.4);
     
-    CCRotateTo *rotate = CCRotateTo::create(0,90*3);
+    CCRotateTo *rotate = CCRotateTo::create(0, 90 * 3);
     spriteTime->runAction(rotate);
-	//spriteTime->setColor(ccc3(0,50,50));
-	this->addChild(spriteTime,10);
+	this->addChild(spriteTime, 10);
     
     this->schedule(schedule_selector(HelloWorld::updateTime), 1);
     //-----------------------------------------------------------------
@@ -484,8 +483,6 @@ void HelloWorld::playerScore(int player) {
 void HelloWorld::gameReset()
 {
     this->playing = true;
-//    this->minutes = 0;
-//    this->seconds = 0;
     _player1Body->SetLinearVelocity(b2Vec2(0, 0));
     _player1Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
                                       _player1->getContentSize().width/PTM_RATIO), 0);
@@ -518,36 +515,27 @@ CCScene* HelloWorld::scene()
     return scene;
 }
 
-void HelloWorld::updateTime(float dt)
-{
-    if(playing==true && minutes<3)
-	{
-		if(seconds<60)	seconds++;
-		else
-		{
-			if(minutes<60)
-				minutes++;
-			else
-			{
-				minutes=0;
-			}
-			seconds=0;
+void HelloWorld::updateTime(float dt) {
+    if(playing == true && minutes >= 0) {
+		if(seconds > 0)	seconds--;
+		else {
+			if(minutes > 0) minutes--;
+			else  minutes = 0;
+			seconds=60;
 		}
 	}
     
-	char strTime[20] = {0}; //khong duoc xoa hai dong nay de lan sau con dung
-	if(minutes<10&&seconds<10)
-        sprintf(strTime, "0%i:0%i",minutes,seconds);
-	else if(minutes<10&&seconds>=10)
-        sprintf(strTime, "0%i:%i",minutes,seconds);
-    
+	char strTime[20] = {0};
+	if(minutes < 10 && seconds < 10)
+        sprintf(strTime, "0%i:0%i", minutes, seconds);
+	else if(minutes < 10 && seconds >= 10)
+        sprintf(strTime, "0%i:%i", minutes, seconds);
     
 	CCTexture2D *texTime=new CCTexture2D();
-    
-	texTime->initWithString(strTime,"Times New Roman",34);
+	texTime->initWithString(strTime, "Times New Roman", 34);
 	spriteTime->setTexture(texTime);
     
-    if (minutes == 3) {
+    if (minutes == 0 && seconds == 0) {
         this->unscheduleAllSelectors();
         this->unscheduleUpdate();
     }
