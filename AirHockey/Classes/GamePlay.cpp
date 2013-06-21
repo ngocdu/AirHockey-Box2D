@@ -96,7 +96,7 @@ GamePlay::GamePlay()
 	this->addChild(spriteTime, 10);
     
 
-    this->schedule(schedule_selector(HelloWorld::updateTime), 1);
+    this->schedule(schedule_selector(GamePlay::updateTime), 1);
     
     //------------------add backgroungd finish-------------------------
     this->addBgLose();
@@ -139,7 +139,7 @@ GamePlay::GamePlay()
     this->addChild(_player2, 1);
     b2BodyDef player2BodyDef;
     player2BodyDef.type = b2_dynamicBody;
-    player2BodyDef.position.Set(_screenSize.width * 0.2 / PTM_RATIO,
+    player2BodyDef.position.Set(_screenSize.width * 0.5 / PTM_RATIO,
                                 (_screenSize.height -
                                  _player2->getContentSize().width) / PTM_RATIO);
     player2BodyDef.userData = _player2;
@@ -527,7 +527,7 @@ void GamePlay::updateTime(float dt) {
 	spriteTime->setTexture(texTime);
 }
 
-void HelloWorld::addBgWin() {
+void GamePlay::addBgWin() {
     CCSize s = CCDirector::sharedDirector()->getWinSize() ;
     bgWin = CCSprite::create("Default.png");
     bgWin->setPosition(ccp(s.width * 2 * (3.0f / 4), s.height / 2)) ;
@@ -557,7 +557,7 @@ void HelloWorld::addBgWin() {
     
 }
 
-void HelloWorld::addBgLose() {
+void GamePlay::addBgLose() {
     CCSize s = CCDirector::sharedDirector()->getWinSize() ;
     bgLose = CCSprite::create("Default.png");
     bgLose->setPosition(ccp(s.width * 2 * (3.0f / 4), s.height / 2)) ;
@@ -578,7 +578,7 @@ void HelloWorld::addBgLose() {
     this->addChild(menuLose,11) ;
 }
 
-void HelloWorld::moveBgWin(int i) {
+void GamePlay::moveBgWin(int i) {
     CCSize s = CCDirector::sharedDirector()->getWinSize() ;
     if (i == 1) {
         CCMoveTo * bgWinMove = CCMoveTo::create(1, ccp(s.width / 2, s.height/2)) ;
@@ -607,7 +607,7 @@ void HelloWorld::moveBgWin(int i) {
     }
 }
 
-void HelloWorld::moveBgLose(int i) {
+void GamePlay::moveBgLose(int i) {
     CCSize s = CCDirector::sharedDirector()->getWinSize() ;
     if (i == 1) {
         CCMoveTo * bgLoseMove = CCMoveTo::create(1, ccp(s.width /2, s.height/2)) ;
@@ -638,7 +638,7 @@ void HelloWorld::moveBgLose(int i) {
     }
 }
 
-void HelloWorld::rePlay() {
+void GamePlay::rePlay() {
     playing = true;
     minutes = 2;
     seconds = 60;
@@ -670,5 +670,5 @@ void HelloWorld::rePlay() {
     _player2ScoreLabel2->setTexture(singleDigit2->getTexture());
 
     this->scheduleUpdate();
-    this->schedule(schedule_selector(HelloWorld::updateTime), 1);
+    this->schedule(schedule_selector(GamePlay::updateTime), 1);
 }
