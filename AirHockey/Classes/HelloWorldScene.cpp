@@ -242,6 +242,8 @@ void HelloWorld::createEdge(float x1, float y1,
     b2FixtureDef groundEdgeDef;
     groundEdgeDef.shape = &groundEdgeShape;
     groundEdgeDef.filter.groupIndex = groupIndex;
+    groundEdgeDef.friction = 5.0;
+//    groundEdgeDef.restitution = 2.0;
     _groundBody->CreateFixture(&groundEdgeDef);
 }
 
@@ -291,22 +293,33 @@ void HelloWorld::update(float dt)
         }
     }
     
-//    std::vector<MyContact>::iterator pos;
-//    for (pos = _contactListener->_contacts.begin();
-//         pos != _contactListener->_contacts.end(); ++pos) {
-//        MyContact contact = *pos;
-//    }
+    _ballX = _ball->getPositionX();
+    _ballY = _ball->getPositionY();
     
-    
-    
-    if (_ball->getPositionY() >= s.height-55) {
+    if (_ballY >= s.height - 55) {
         HelloWorld::playerScore(1);
         HelloWorld::gameReset();
     }
     
-    if (_ball->getPositionY() <= 55) {
+    if (_ballY <= 55) {
         HelloWorld::playerScore(2);
         HelloWorld::gameReset();
+    }
+    
+//    if (_ballY > 55 && _ballY < s.height * 2 / 3 &&
+//        _ballX > s.width * 2 / 5 && _ballX < s.width * 3 / 5) {
+//        _player2Body->SetTransform(b2Vec2(_ballX / PTM_RATIO,
+//                                          _player2->getPositionY()/PTM_RATIO), 0);
+//    }
+    
+    if (_ballY > s.height / 2) {
+        if (_player2->getPositionY() > s.height / 2)
+            _player2Body->SetLinearVelocity(
+                b2Vec2((_ballX - _player2->getPositionX())/10,
+                       (_ballY - _player2->getPositionY())/10));
+        else _player2Body->SetLinearVelocity(
+                b2Vec2((- _ballX + _player2->getPositionX())/10,
+                       (- _ballY + _player2->getPositionY())/10));
     }
 }
 

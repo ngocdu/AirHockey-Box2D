@@ -79,6 +79,11 @@ private:
     int _sc2Tens;
     int _sc2SingleDigit;
     
+    float _ballX;
+    float _ballY;
+    
+    float lastHit = 0;
+    
     bool p1touched = false;
     bool p2touched = false;
     
