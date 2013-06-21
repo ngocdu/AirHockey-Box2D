@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "Box2D.h"
 #include "MyContactListener.h"
+#include "GameSprite.h"
 
 USING_NS_CC;
 
@@ -49,6 +50,8 @@ public:
     
     void update(float dt);
     
+    void updateTime(float dt);
+    
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
     b2Body* _groundBody;
@@ -63,8 +66,8 @@ private:
     b2Fixture *lowerMiddle;
     b2Fixture *higherMiddle;
     
-    CCSprite *_player1;
-    CCSprite *_player2;
+    GameSprite *_player1;
+    GameSprite *_player2;
     CCSprite *_ball;
     
     CCSprite *_player1ScoreLabel1;
@@ -93,7 +96,13 @@ private:
     cocos2d::CCTexture2D* m_pSpriteTexture; // weak ref
     
     b2MouseJoint *_mouseJoint;
+    
     MyContactListener *_contactListener;
+    
+    int minutes;
+	int seconds;
+    bool playing;
+	cocos2d:: CCSprite *spriteTime ;
 };
 
 #endif // __HELLO_WORLD_H__

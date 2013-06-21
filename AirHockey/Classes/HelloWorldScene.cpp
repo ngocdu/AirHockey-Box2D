@@ -7,8 +7,6 @@
 //
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "MyContactListener.h"
-
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -77,6 +75,29 @@ HelloWorld::HelloWorld()
     // init physics
     this->initPhysics();
 
+    //------------------Time init--------------------------------------
+    CCSize size = CCDirector::sharedDirector()->getWinSize();
+    this->minutes = 2;
+    this->seconds = 60;
+    this->playing = true;
+    
+    char strTime[20] = {0};
+	sprintf(strTime, "0%i:0%i", minutes,seconds);
+
+	CCTexture2D *texTime = new CCTexture2D();
+	texTime->initWithString(strTime, "Times New Roman", 34);
+	spriteTime = CCSprite::createWithTexture(texTime);
+	spriteTime->setPosition(ccp(145/2, size.height * 0.5));
+    spriteTime->setScale(1.4);
+    
+    CCRotateTo *rotate = CCRotateTo::create(0, 90 * 3);
+    spriteTime->runAction(rotate);
+	this->addChild(spriteTime, 10);
+    
+    this->schedule(schedule_selector(HelloWorld::updateTime), 1);
+    //-----------------------------------------------------------------
+    
+    
     CCSpriteBatchNode *parent = CCSpriteBatchNode::create("blocks.png", 100);
     m_pSpriteTexture = parent->getTexture();
 
@@ -91,7 +112,7 @@ HelloWorld::HelloWorld()
     court->setPosition(ccp(_screenSize.width * 0.5, _screenSize.height * 0.5));
     this->addChild(court);
     
-    _player1 = CCSprite::create("player1.png");
+    _player1 = GameSprite::gameSpriteWidthFile("player1.png");
     _player1->setTag(99);
     this->addChild(_player1, 1);
     b2BodyDef player1BodyDef;
@@ -99,7 +120,7 @@ HelloWorld::HelloWorld()
     player1BodyDef.position.Set(_screenSize.width * 0.5 / PTM_RATIO,
                                 _player1->getContentSize().width / PTM_RATIO );
     player1BodyDef.userData = _player1;
-    player1BodyDef.linearDamping = 5.0f;
+    player1BodyDef.linearDamping =5.0f;
     _player1Body = world->CreateBody(&player1BodyDef);
     b2FixtureDef player1FixtureDef;
     b2CircleShape circle1;
@@ -113,7 +134,7 @@ HelloWorld::HelloWorld()
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
     
     
-    _player2 = CCSprite::create("player2.png");
+    _player2 = GameSprite::gameSpriteWidthFile("player2.png");
     _player2->setTag(99);
     this->addChild(_player2, 1);
     b2BodyDef player2BodyDef;
@@ -122,12 +143,11 @@ HelloWorld::HelloWorld()
                                 (_screenSize.height -
                                  _player2->getContentSize().width) / PTM_RATIO);
     player2BodyDef.userData = _player2;
-    player2BodyDef.linearDamping = 5.0f;
+    player2BodyDef.linearDamping =5.0f;
     _player2Body = world->CreateBody(&player2BodyDef);
     b2FixtureDef player2FixtureDef;
     b2CircleShape circle2;
     float m_radius2 = _player2->getContentSize().height/2;
-    CCLOG("radius2: %f", m_radius2);
     circle2.m_radius = m_radius2/PTM_RATIO;
     player2FixtureDef.shape = &circle2;
     player2FixtureDef.density = 1.1f;
@@ -159,7 +179,6 @@ HelloWorld::HelloWorld()
     _players = CCArray::create(_player1, _player2, NULL);
     _players->retain();
     
-    
     CCSpriteBatchNode *counter = CCSpriteBatchNode::create("counter.pvr.ccz");
     this->addChild(counter);
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("counter.plist");
@@ -167,13 +186,13 @@ HelloWorld::HelloWorld()
     _player1ScoreLabel1 = CCSprite::createWithSpriteFrameName("0.png");
     _player1ScoreLabel1->setScale(0.7);
     _player1ScoreLabel1->setPosition(ccp(_screenSize.width - 115,
-                                        _screenSize.height * 0.5 - 130));
+                                        _screenSize.height * 0.5 - 125));
     _player1ScoreLabel1->setRotation(90);
     this->addChild(_player1ScoreLabel1);
     _player1ScoreLabel2 = CCSprite::createWithSpriteFrameName("0.png");
     _player1ScoreLabel2->setScale(0.7);
     _player1ScoreLabel2->setPosition(ccp(_screenSize.width - 115,
-                                         _screenSize.height * 0.5 - 100));
+                                         _screenSize.height * 0.5 - 95));
     _player1ScoreLabel2->setRotation(90);
     this->addChild(_player1ScoreLabel2);
     
@@ -202,6 +221,8 @@ HelloWorld::~HelloWorld()
     //delete m_debugDraw;
 }
 
+
+
 void HelloWorld::initPhysics()
 {
     b2Vec2 gravity;
@@ -209,8 +230,7 @@ void HelloWorld::initPhysics()
     world = new b2World(gravity);
     world->SetAllowSleeping(true);
     world->SetContinuousPhysics(true);
-    
-    
+
     uint32 flags = 0;
     flags += b2Draw::e_shapeBit;
     
@@ -242,8 +262,6 @@ void HelloWorld::createEdge(float x1, float y1,
     b2FixtureDef groundEdgeDef;
     groundEdgeDef.shape = &groundEdgeShape;
     groundEdgeDef.filter.groupIndex = groupIndex;
-    groundEdgeDef.friction = 5.0;
-//    groundEdgeDef.restitution = 2.0;
     _groundBody->CreateFixture(&groundEdgeDef);
 }
 
@@ -269,41 +287,40 @@ void HelloWorld::draw()
 
 void HelloWorld::update(float dt)
 {
-    
-    int velocityIterations = 8;
-    int positionIterations = 3;
-    
-    
-    // Instruct the world to perform a single step of simulation. It is
-    // generally best to keep the time step and iterations fixed.
-    world->Step(dt, velocityIterations, positionIterations);
-    
-    //Iterate over the bodies in the physics world
-    for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
-    {
-        if (b->GetUserData() != NULL) {
-            CCSprite* myActor = (CCSprite*)b->GetUserData();
-            myActor->setPosition( CCPointMake( b->GetPosition().x * PTM_RATIO,
-                                              b->GetPosition().y * PTM_RATIO) );
-            if (myActor->getTag() == 99) {
-                b->SetLinearVelocity(b2Vec2(0, 0));
-                b->SetFixedRotation(true);
+    if (this->playing == true) {
+        int velocityIterations = 8;
+        int positionIterations = 3;
+        
+        
+        // Instruct the world to perform a single step of simulation. It is
+        // generally best to keep the time step and iterations fixed.
+        world->Step(dt, velocityIterations, positionIterations);
+        
+        //Iterate over the bodies in the physics world
+        for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
+        {
+            if (b->GetUserData() != NULL) {
+                CCSprite* myActor = (CCSprite*)b->GetUserData();
+                myActor->setPosition( CCPointMake( b->GetPosition().x * PTM_RATIO,
+                                                  b->GetPosition().y * PTM_RATIO) );
+                if (myActor->getTag() == 99) {
+                    b->SetLinearVelocity(b2Vec2(0, 0));
+                    b->SetFixedRotation(true);
+                }
+                
             }
-            
         }
-    }
-    
-    _ballX = _ball->getPositionX();
-    _ballY = _ball->getPositionY();
-    
-    if (_ballY >= s.height - 55) {
-        HelloWorld::playerScore(1);
-        HelloWorld::gameReset();
-    }
-    
-    if (_ballY <= 55) {
-        HelloWorld::playerScore(2);
-        HelloWorld::gameReset();
+        
+        if (_ball->getPositionY() >= s.height-55) {
+            HelloWorld::playerScore(1);
+            HelloWorld::gameReset();
+        }
+        
+        if (_ball->getPositionY() <= 55) {
+            HelloWorld::playerScore(2);
+            HelloWorld::gameReset();
+        }
+
     }
     
 //    if (_ballY > 55 && _ballY < s.height * 2 / 3 &&
@@ -324,6 +341,7 @@ void HelloWorld::update(float dt)
 }
 
 void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event){
+
     if (_mouseJoint != NULL) return;
     CCTouch *touch = (CCTouch*)touches->anyObject();
     CCPoint tap = touch->getLocation();
@@ -404,7 +422,9 @@ void HelloWorld::playerScore(int player) {
     
 }
 
-void HelloWorld::gameReset(){
+void HelloWorld::gameReset()
+{
+    this->playing = true;
     _player1Body->SetLinearVelocity(b2Vec2(0, 0));
     _player1Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
                                       _player1->getContentSize().width/PTM_RATIO), 0);
@@ -413,8 +433,8 @@ void HelloWorld::gameReset(){
     _player2Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
                                       (_screenSize.height -
                                        _player2->getContentSize().width)/PTM_RATIO), 0);
-    
-    if (_mouseJoint) {
+
+    if (_mouseJoint != NULL) {
         world->DestroyJoint(_mouseJoint);
         _mouseJoint = NULL;
     }
@@ -431,4 +451,30 @@ CCScene* HelloWorld::scene()
     layer->release();
     
     return scene;
+}
+
+void HelloWorld::updateTime(float dt) {
+    if(playing == true && minutes >= 0) {
+		if(seconds > 0)	seconds--;
+		else {
+			if(minutes > 0) minutes--;
+			else  minutes = 0;
+			seconds=60;
+		}
+	}
+    
+	char strTime[20] = {0};
+	if(minutes < 10 && seconds < 10)
+        sprintf(strTime, "0%i:0%i", minutes, seconds);
+	else if(minutes < 10 && seconds >= 10)
+        sprintf(strTime, "0%i:%i", minutes, seconds);
+    
+	CCTexture2D *texTime=new CCTexture2D();
+	texTime->initWithString(strTime, "Times New Roman", 34);
+	spriteTime->setTexture(texTime);
+    
+    if (minutes == 0 && seconds == 0) {
+        this->unscheduleAllSelectors();
+        this->unscheduleUpdate();
+    }
 }

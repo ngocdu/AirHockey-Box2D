@@ -7,6 +7,10 @@
 //
 
 #include "MyContactListener.h"
+#include "SimpleAudioEngine.h"
+
+using namespace CocosDenshion;
+
 MyContactListener::MyContactListener() : _contacts()
 {
 }
