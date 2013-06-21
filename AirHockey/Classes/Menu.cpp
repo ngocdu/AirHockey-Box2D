@@ -30,7 +30,7 @@ bool Menu::init()
     //create startMenuItem
     CCMenuItemImage *startMenuItem = CCMenuItemImage::create(
                                                           "start.png",
-                                                          "start.png.png",
+                                                          "start.png",
                                                           this,
                                                           menu_selector(Menu::menuStartgame));
     startMenuItem->setPosition(ccp((size.width / 2) - 20, size.height - 348));
@@ -38,7 +38,7 @@ bool Menu::init()
     //create rankMenuItem
     CCMenuItemImage *rankMenuItem = CCMenuItemImage::create(
                                                         "rank.png",
-                                                        "rank.png.png",
+                                                        "rank.png",
                                                         this,
                                                         menu_selector(Menu::menuRanking));
     rankMenuItem->setPosition(ccp((size.width / 2) - 20, size.height - 487));
@@ -46,7 +46,7 @@ bool Menu::init()
     //create BMGMenuItem
     CCMenuItemImage *bmgMenuItem = CCMenuItemImage::create(
                                                         "bgm.png",
-                                                        "bgm.png.png",
+                                                        "bgm.png",
                                                         this,
                                                         menu_selector(Menu::menuBGM));
     bmgMenuItem->setPosition(ccp((size.width / 2) - 20, size.height - 635));
