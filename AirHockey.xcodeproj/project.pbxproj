@@ -309,6 +309,8 @@
 		848194E9177304F00084A86B /* rank.png in Resources */ = {isa = PBXBuildFile; fileRef = 848194E5177304F00084A86B /* rank.png */; };
 		848194EA177304F00084A86B /* start.png in Resources */ = {isa = PBXBuildFile; fileRef = 848194E6177304F00084A86B /* start.png */; };
 		848194ED177305070084A86B /* Menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 848194EB177305070084A86B /* Menu.cpp */; };
+		DCEB633E1773F0A7004AEB39 /* btn_Continue.png in Resources */ = {isa = PBXBuildFile; fileRef = DCEB633C1773F0A6004AEB39 /* btn_Continue.png */; };
+		DCEB633F1773F0A7004AEB39 /* btn_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = DCEB633D1773F0A6004AEB39 /* btn_menu.png */; };
 		DCF4F78B1772C9C0003E6EB0 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCF4F78A1772C9C0003E6EB0 /* libcurl.a */; };
 /* End PBXBuildFile section */
 
@@ -938,6 +940,8 @@
 		848194E6177304F00084A86B /* start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = start.png; path = Resources/start.png; sourceTree = "<group>"; };
 		848194EB177305070084A86B /* Menu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Menu.cpp; path = Classes/Menu.cpp; sourceTree = "<group>"; };
 		848194EC177305070084A86B /* Menu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Menu.h; path = Classes/Menu.h; sourceTree = "<group>"; };
+		DCEB633C1773F0A6004AEB39 /* btn_Continue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_Continue.png; path = Resources/btn_Continue.png; sourceTree = "<group>"; };
+		DCEB633D1773F0A6004AEB39 /* btn_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_menu.png; path = Resources/btn_menu.png; sourceTree = "<group>"; };
 		DCF4F78A1772C9C0003E6EB0 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcurl.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1065,6 +1069,8 @@
 				0F34B0861774457100F9FEE4 /* sd */,
 				0F34A8E717742AFF00F9FEE4 /* score-num */,
 				0F34A8F717742AFF00F9FEE4 /* sound */,
+				DCEB633C1773F0A6004AEB39 /* btn_Continue.png */,
+				DCEB633D1773F0A6004AEB39 /* btn_menu.png */,
 				848194E3177304F00084A86B /* bgm.png */,
 				848194E4177304F00084A86B /* menu.png */,
 				848194E5177304F00084A86B /* rank.png */,
@@ -2294,6 +2300,8 @@
 				0F34B08C1774457200F9FEE4 /* mallet1.png in Resources */,
 				0F34B08D1774457200F9FEE4 /* mallet2.png in Resources */,
 				0F34B08E1774457200F9FEE4 /* puck.png in Resources */,
+				DCEB633E1773F0A7004AEB39 /* btn_Continue.png in Resources */,
+				DCEB633F1773F0A7004AEB39 /* btn_menu.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
