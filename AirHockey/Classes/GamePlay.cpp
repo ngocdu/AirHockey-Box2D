@@ -1,11 +1,11 @@
 //
-//  HelloWorldScene.cpp
+//  GamePlayScene.cpp
 //  AirHockey
 //
 //  Created by Trung Kien Do on 13/06/12.
 //  Copyright __MyCompanyName__ 2013年. All rights reserved.
 //
-#include "HelloWorldScene.h"
+#include "GamePlay.h"
 #include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
@@ -67,7 +67,7 @@ CCAffineTransform PhysicsSprite::nodeToParentTransform(void)
     return m_sTransform;
 }
 
-HelloWorld::HelloWorld()
+GamePlay::GamePlay()
 {
     setTouchEnabled( true );
     setAccelerometerEnabled( true );
@@ -94,25 +94,19 @@ HelloWorld::HelloWorld()
     spriteTime->runAction(rotate);
 	this->addChild(spriteTime, 10);
     
-    this->schedule(schedule_selector(HelloWorld::updateTime), 1);
+    this->schedule(schedule_selector(GamePlay::updateTime), 1);
     //-----------------------------------------------------------------
-    
-    
-    CCSpriteBatchNode *parent = CCSpriteBatchNode::create("blocks.png", 100);
-    m_pSpriteTexture = parent->getTexture();
-
-    addChild(parent, 0, kTagParentNode);
 
 
     _player1Score = 0;
     _player2Score = 0;
     _screenSize = CCDirector::sharedDirector()->getWinSize();
     
-    CCSprite *court = CCSprite::create("background2.png");
+    CCSprite *court = CCSprite::create("court.png");
     court->setPosition(ccp(_screenSize.width * 0.5, _screenSize.height * 0.5));
     this->addChild(court);
     
-    _player1 = GameSprite::gameSpriteWidthFile("player1.png");
+    _player1 = GameSprite::gameSpriteWidthFile("mallet1.png");
     _player1->setTag(99);
     this->addChild(_player1, 1);
     b2BodyDef player1BodyDef;
@@ -134,7 +128,7 @@ HelloWorld::HelloWorld()
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
     
     
-    _player2 = GameSprite::gameSpriteWidthFile("player2.png");
+    _player2 = GameSprite::gameSpriteWidthFile("mallet2.png");
     _player2->setTag(99);
     this->addChild(_player2, 1);
     b2BodyDef player2BodyDef;
@@ -156,7 +150,7 @@ HelloWorld::HelloWorld()
     _player2Fixture = _player2Body->CreateFixture(&player2FixtureDef);
     
     
-    _ball = CCSprite::create("ball.png");
+    _ball = CCSprite::create("puck.png");
     this->addChild(_ball, 1, 10);
     b2BodyDef ballBodyDef;
     ballBodyDef.type = b2_dynamicBody;
@@ -214,7 +208,7 @@ HelloWorld::HelloWorld()
     scheduleUpdate();
 }
 
-HelloWorld::~HelloWorld()
+GamePlay::~GamePlay()
 {
     delete world;
     world = NULL;
@@ -224,7 +218,7 @@ HelloWorld::~HelloWorld()
 
 
 
-void HelloWorld::initPhysics()
+void GamePlay::initPhysics()
 {
     b2Vec2 gravity;
     gravity.Set(0.0f, 0.0f);
@@ -239,22 +233,22 @@ void HelloWorld::initPhysics()
     groundBodyDef.position.Set(0, 0);
     _groundBody = world->CreateBody(&groundBodyDef);
     
-    HelloWorld::createEdge(0, 70, 260, 70, 0);
-    HelloWorld::createEdge(s.width - 260, 70, s.width, 70, 0);
-    HelloWorld::createEdge(260, 70, s.width - 260, 70, -10);
-    HelloWorld::createEdge(260, 70, 260, 0, 0);
-    HelloWorld::createEdge(s.width - 260, 70, s.width - 260, 0, 0);
-    HelloWorld::createEdge(0, s.height - 70, 260, s.height - 70, 0);
-    HelloWorld::createEdge(s.width - 260, s.height - 70, s.width, s.height - 70, 0);
-    HelloWorld::createEdge(260, s.height - 70, s.width - 260, s.height - 70, -10);
-    HelloWorld::createEdge(260, s.height - 70, 260, s.height, 0);
-    HelloWorld::createEdge(s.width - 260, s.height - 70, s.width - 260, s.height, 0);
-    HelloWorld::createEdge(55, s.height, 55, 0, 0);
-    HelloWorld::createEdge(s.width - 45, s.height, s.width - 45, 0, 0);
-    HelloWorld::createEdge(0, s.height/2, s.width, s.height/2, -10);
+    GamePlay::createEdge(0, 10, 210, 10, 0);
+    GamePlay::createEdge(s.width - 210, 10, s.width, 10, 0);
+    GamePlay::createEdge(210, 10, s.width - 210, 10, -10);
+    GamePlay::createEdge(210, 10, 210, 0, 0);
+    GamePlay::createEdge(s.width - 210, 10, s.width - 210, 0, 0);
+    GamePlay::createEdge(0, s.height - 10, 210, s.height - 10, 0);
+    GamePlay::createEdge(s.width - 210, s.height - 10, s.width, s.height - 10, 0);
+    GamePlay::createEdge(210, s.height - 10, s.width - 210, s.height - 10, -10);
+    GamePlay::createEdge(210, s.height - 10, 210, s.height, 0);
+    GamePlay::createEdge(s.width - 210, s.height - 10, s.width - 210, s.height, 0);
+    GamePlay::createEdge(10, s.height, 10, 0, 0);
+    GamePlay::createEdge(s.width - 10, s.height, s.width - 10, 0, 0);
+    GamePlay::createEdge(0, s.height/2, s.width, s.height/2, -10);
 }
 
-void HelloWorld::createEdge(float x1, float y1,
+void GamePlay::createEdge(float x1, float y1,
                             float x2, float y2,
                             int groupIndex) {
     b2EdgeShape groundEdgeShape;
@@ -267,7 +261,7 @@ void HelloWorld::createEdge(float x1, float y1,
 }
 
 
-void HelloWorld::draw()
+void GamePlay::draw()
 {
     //
     // IMPORTANT:
@@ -286,7 +280,7 @@ void HelloWorld::draw()
 }
 
 
-void HelloWorld::update(float dt)
+void GamePlay::update(float dt)
 {
     if (this->playing == true) {
         int velocityIterations = 8;
@@ -312,14 +306,14 @@ void HelloWorld::update(float dt)
             }
         }
         
-        if (_ball->getPositionY() >= s.height-55) {
-            HelloWorld::playerScore(1);
-            HelloWorld::gameReset();
+        if (_ball->getPositionY() >= s.height + _ball->getContentSize().height/2) {
+            GamePlay::playerScore(1);
+            GamePlay::gameReset();
         }
         
-        if (_ball->getPositionY() <= 55) {
-            HelloWorld::playerScore(2);
-            HelloWorld::gameReset();
+        if (_ball->getPositionY() <= -_ball->getContentSize().height/2) {
+            GamePlay::playerScore(2);
+            GamePlay::gameReset();
         }
 
     }
@@ -336,12 +330,12 @@ void HelloWorld::update(float dt)
     }
 }
 
-void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event){
+void GamePlay::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event){
 
     if (_mouseJoint != NULL) return;
     CCTouch *touch = (CCTouch*)touches->anyObject();
     CCPoint tap = touch->getLocation();
-    b2Vec2 locationWorld = HelloWorld::ptm(tap);
+    b2Vec2 locationWorld = GamePlay::ptm(tap);
     
     if (_player1Fixture->TestPoint(locationWorld)) {
         b2MouseJointDef md;
@@ -358,23 +352,23 @@ void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event
     }
 }
 
-void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+void GamePlay::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
     if (_mouseJoint == NULL) return;
     CCTouch  *myTouch = (CCTouch *)touches->anyObject();
     CCPoint location = myTouch->getLocation();
-    b2Vec2 locationWorld = HelloWorld::ptm(location);
+    b2Vec2 locationWorld = GamePlay::ptm(location);
     _mouseJoint->SetTarget(locationWorld);
 
 }
 
-void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event) {
+void GamePlay::ccTouchesEnded(CCSet* touches, CCEvent* event) {
     if (_mouseJoint != NULL) {
         world->DestroyJoint(_mouseJoint);
         _mouseJoint = NULL;
     }
 }
 
-void HelloWorld::playerScore(int player) {
+void GamePlay::playerScore(int player) {
     SimpleAudioEngine::sharedEngine()->playEffect("score.wav");
     char scoreBuff[10];
     
@@ -418,15 +412,15 @@ void HelloWorld::playerScore(int player) {
     
 }
 
-void HelloWorld::gameReset()
+void GamePlay::gameReset()
 {
     this->playing = true;
     _player1Body->SetLinearVelocity(b2Vec2(0, 0));
-    _player1Body->SetTransform(HelloWorld::ptm2(_screenSize.width/2,
+    _player1Body->SetTransform(GamePlay::ptm2(_screenSize.width/2,
                     _player1->getContentSize().width), 0);
     
     _player2Body->SetLinearVelocity(b2Vec2(0, 0));
-    _player2Body->SetTransform(HelloWorld::ptm2(_screenSize.width/2,
+    _player2Body->SetTransform(GamePlay::ptm2(_screenSize.width/2,
                     _screenSize.height -_player2->getContentSize().width), 0);
 
     if (_mouseJoint != NULL) {
@@ -435,20 +429,20 @@ void HelloWorld::gameReset()
     }
 }
 
-CCScene* HelloWorld::scene()
+CCScene* GamePlay::scene()
 {
     // 'scene' is an autorelease object
     CCScene *scene = CCScene::create();
     
     // add layer as a child to scene
-    CCLayer* layer = new HelloWorld();
+    CCLayer* layer = new GamePlay();
     scene->addChild(layer);
     layer->release();
     
     return scene;
 }
 
-void HelloWorld::updateTime(float dt) {
+void GamePlay::updateTime(float dt) {
     if(playing == true && minutes >= 0) {
 		if(seconds > 0)	seconds--;
 		else {

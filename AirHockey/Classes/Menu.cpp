@@ -7,7 +7,7 @@
 //
 
 #include "Menu.h"
-#include "HelloWorldScene.h"
+#include "GamePlay.h"
 using namespace cocos2d;
 CCScene* Menu::scene()
 {
@@ -72,8 +72,8 @@ void Menu::menuRanking(CCObject* pSender)
 }
 void Menu::menuStartgame(CCObject* pSender)
 {
-    CCScene *helloScene = HelloWorld::scene();
-    CCScene *pScene = CCTransitionFadeTR::create(2, helloScene);
+    CCScene *GamePlayScene = GamePlay::scene();
+    CCScene *pScene = CCTransitionFadeTR::create(2, GamePlayScene);
     CCDirector::sharedDirector()->replaceScene(pScene);
 }
 

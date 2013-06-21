@@ -1,12 +1,12 @@
 //
-//  HelloWorldScene.h
+//  GamePlay.h
 //  AirHockey
 //
 //  Created by Trung Kien Do on 13/06/12.
 //  Copyright __MyCompanyName__ 2013年. All rights reserved.
 //
-#ifndef __HELLO_WORLD_H__
-#define __HELLO_WORLD_H__
+#ifndef __GAME_PLAY_H__
+#define __GAME_PLAY_H__
 
 // When you import this file, you import all the cocos2d classes
 #include "cocos2d.h"
@@ -29,13 +29,13 @@ private:
     b2Body* m_pBody;    // strong ref
 };
 
-class HelloWorld : public cocos2d::CCLayer {
+class GamePlay : public cocos2d::CCLayer {
     CCSize _screenSize;
 public:
-    ~HelloWorld();
-    HelloWorld();
+    ~GamePlay();
+    GamePlay();
     
-    // returns a Scene that contains the HelloWorld as the only child
+    // returns a Scene that contains the GamePlay as the only child
     static cocos2d::CCScene* scene();
     
     void initPhysics();
@@ -114,4 +114,4 @@ private:
 	cocos2d:: CCSprite *spriteTime ;
 };
 
-#endif // __HELLO_WORLD_H__
+#endif // __GAME_PLAY_H__

@@ -10,8 +10,9 @@
 
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
-#include "HelloWorldScene.h"
+#include "GamePlay.h"
 #include "Menu.h"
+#include "AppMacros.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -29,19 +30,29 @@ bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
-    pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
-
-    CCSize screenSize = CCEGLView::sharedOpenGLView()->getFrameSize();
-    CCEGLView::sharedOpenGLView()->setDesignResolutionSize(768, 1024, kResolutionExactFit);
+    CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+    pDirector->setOpenGLView(pEGLView);
     
-    vector<string>searchPaths;
-    if (screenSize.width > 768) {
-        CCLOG("hd %f", screenSize.width);
-        searchPaths.push_back("/hd");
-        pDirector->setContentScaleFactor(2);
-    }
-    
-    CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
+	CCSize screenSize = pEGLView->getFrameSize();
+    CCSize designSize = CCSizeMake(768, 1024);
+//    std::vector<std::string> searchPaths;
+//    
+//    if (screenSize.height > 768)
+//    {
+//        searchPaths.push_back("hd");
+//        searchPaths.push_back("sd");
+//        pDirector->setContentScaleFactor(2);
+//    }
+//    else
+//    {
+//        searchPaths.push_back("sd");
+//        pDirector->setContentScaleFactor(1);
+//    }
+//    
+//    CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
+    CCEGLView::sharedOpenGLView()->setDesignResolutionSize(designSize.width,
+                                                           designSize.height,
+                                                           kResolutionNoBorder);
     
     // turn on display FPS
     pDirector->setDisplayStats(true);
