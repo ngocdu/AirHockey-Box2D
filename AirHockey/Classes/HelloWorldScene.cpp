@@ -164,6 +164,7 @@ HelloWorld::HelloWorld()
     ballBodyDef.position.Set(_screenSize.width/2/PTM_RATIO,
                              _screenSize.height/2/PTM_RATIO);
     ballBodyDef.userData = _ball;
+    ballBodyDef.bullet = true;
     _ballBody = world->CreateBody(&ballBodyDef);
     b2FixtureDef ballFixtureDef;
     b2CircleShape circle3;
@@ -301,7 +302,7 @@ void HelloWorld::update(float dt)
         {
             if (b->GetUserData() != NULL) {
                 CCSprite* myActor = (CCSprite*)b->GetUserData();
-                myActor->setPosition( CCPointMake( b->GetPosition().x * PTM_RATIO,
+                myActor->setPosition( CCPointMake(b->GetPosition().x * PTM_RATIO,
                                                   b->GetPosition().y * PTM_RATIO) );
                 if (myActor->getTag() == 99) {
                     b->SetLinearVelocity(b2Vec2(0, 0));
@@ -323,11 +324,6 @@ void HelloWorld::update(float dt)
 
     }
     
-//    if (_ballY > 55 && _ballY < s.height * 2 / 3 &&
-//        _ballX > s.width * 2 / 5 && _ballX < s.width * 3 / 5) {
-//        _player2Body->SetTransform(b2Vec2(_ballX / PTM_RATIO,
-//                                          _player2->getPositionY()/PTM_RATIO), 0);
-//    }
     
     if (_ballY > s.height / 2) {
         if (_player2->getPositionY() > s.height / 2)
@@ -345,7 +341,7 @@ void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event
     if (_mouseJoint != NULL) return;
     CCTouch *touch = (CCTouch*)touches->anyObject();
     CCPoint tap = touch->getLocation();
-    b2Vec2 locationWorld = b2Vec2(tap.x / PTM_RATIO, tap.y / PTM_RATIO);
+    b2Vec2 locationWorld = HelloWorld::ptm(tap);
     
     if (_player1Fixture->TestPoint(locationWorld)) {
         b2MouseJointDef md;
@@ -366,7 +362,7 @@ void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event
     if (_mouseJoint == NULL) return;
     CCTouch  *myTouch = (CCTouch *)touches->anyObject();
     CCPoint location = myTouch->getLocation();
-    b2Vec2 locationWorld = b2Vec2(location.x / PTM_RATIO, location.y / PTM_RATIO);
+    b2Vec2 locationWorld = HelloWorld::ptm(location);
     _mouseJoint->SetTarget(locationWorld);
 
 }
@@ -426,13 +422,12 @@ void HelloWorld::gameReset()
 {
     this->playing = true;
     _player1Body->SetLinearVelocity(b2Vec2(0, 0));
-    _player1Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
-                                      _player1->getContentSize().width/PTM_RATIO), 0);
+    _player1Body->SetTransform(HelloWorld::ptm2(_screenSize.width/2,
+                    _player1->getContentSize().width), 0);
     
     _player2Body->SetLinearVelocity(b2Vec2(0, 0));
-    _player2Body->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
-                                      (_screenSize.height -
-                                       _player2->getContentSize().width)/PTM_RATIO), 0);
+    _player2Body->SetTransform(HelloWorld::ptm2(_screenSize.width/2,
+                    _screenSize.height -_player2->getContentSize().width), 0);
 
     if (_mouseJoint != NULL) {
         world->DestroyJoint(_mouseJoint);

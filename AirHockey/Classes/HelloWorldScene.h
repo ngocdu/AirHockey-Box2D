@@ -14,6 +14,8 @@
 #include "MyContactListener.h"
 #include "GameSprite.h"
 
+#define PTM_RATIO 32
+
 USING_NS_CC;
 
 class PhysicsSprite : public cocos2d::CCSprite
@@ -50,11 +52,18 @@ public:
     
     void update(float dt);
     
+    b2Vec2 ptm(CCPoint point) {
+        return b2Vec2(point.x / PTM_RATIO, point.y / PTM_RATIO);
+    }
+    b2Vec2 ptm2(float x, float y) {
+        return b2Vec2(x / PTM_RATIO, y / PTM_RATIO);
+    }
+    
     void updateTime(float dt);
     
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
-    b2Body* _groundBody;
+    b2Body *_groundBody;
     b2Body *_player1Body;
     b2Body *_player2Body;
     b2Body *_ballBody;
