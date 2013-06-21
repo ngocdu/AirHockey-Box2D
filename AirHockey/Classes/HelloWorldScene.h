@@ -52,6 +52,12 @@ public:
     
     void updateTime(float dt);
     
+    void addBgWin();
+    void addBgLose();
+    void moveBgWin(int i);
+    void moveBgLose(int i);
+    void rePlay();
+    
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
     b2Body* _groundBody;
@@ -103,6 +109,17 @@ private:
 	int seconds;
     bool playing;
 	cocos2d:: CCSprite *spriteTime ;
+    
+    //when finish
+    CCSprite *bgWin;
+    CCSprite *bgLose;
+    CCSprite *replayWin;
+    CCSprite *replayLose;
+    CCSprite *menuWin;
+    CCSprite *menuLose;
+    CCLabelTTF *lb_point;
+    bool win ;
+    bool lose ;
 };
 
 #endif // __HELLO_WORLD_H__
