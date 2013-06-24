@@ -309,6 +309,8 @@
 		848194E9177304F00084A86B /* rank.png in Resources */ = {isa = PBXBuildFile; fileRef = 848194E5177304F00084A86B /* rank.png */; };
 		848194EA177304F00084A86B /* start.png in Resources */ = {isa = PBXBuildFile; fileRef = 848194E6177304F00084A86B /* start.png */; };
 		848194ED177305070084A86B /* Menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 848194EB177305070084A86B /* Menu.cpp */; };
+		84A2588E17783721001AD208 /* GameManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A2588A17783721001AD208 /* GameManager.cpp */; };
+		84A2588F17783721001AD208 /* PlayerName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A2588C17783721001AD208 /* PlayerName.cpp */; };
 		DCEB633E1773F0A7004AEB39 /* btn_Continue.png in Resources */ = {isa = PBXBuildFile; fileRef = DCEB633C1773F0A6004AEB39 /* btn_Continue.png */; };
 		DCEB633F1773F0A7004AEB39 /* btn_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = DCEB633D1773F0A6004AEB39 /* btn_menu.png */; };
 		DCF4F78B1772C9C0003E6EB0 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCF4F78A1772C9C0003E6EB0 /* libcurl.a */; };
@@ -940,6 +942,11 @@
 		848194E6177304F00084A86B /* start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = start.png; path = Resources/start.png; sourceTree = "<group>"; };
 		848194EB177305070084A86B /* Menu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Menu.cpp; path = Classes/Menu.cpp; sourceTree = "<group>"; };
 		848194EC177305070084A86B /* Menu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Menu.h; path = Classes/Menu.h; sourceTree = "<group>"; };
+		84A2588A17783721001AD208 /* GameManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameManager.cpp; path = Classes/GameManager.cpp; sourceTree = "<group>"; };
+		84A2588B17783721001AD208 /* GameManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameManager.h; path = Classes/GameManager.h; sourceTree = "<group>"; };
+		84A2588C17783721001AD208 /* PlayerName.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlayerName.cpp; path = Classes/PlayerName.cpp; sourceTree = "<group>"; };
+		84A2588D17783721001AD208 /* PlayerName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerName.h; path = Classes/PlayerName.h; sourceTree = "<group>"; };
+		84A25890177837D3001AD208 /* AppMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppMacros.h; path = Classes/AppMacros.h; sourceTree = "<group>"; };
 		DCEB633C1773F0A6004AEB39 /* btn_Continue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_Continue.png; path = Resources/btn_Continue.png; sourceTree = "<group>"; };
 		DCEB633D1773F0A6004AEB39 /* btn_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_menu.png; path = Resources/btn_menu.png; sourceTree = "<group>"; };
 		DCF4F78A1772C9C0003E6EB0 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcurl.a; sourceTree = "<group>"; };
@@ -2199,6 +2206,11 @@
 		0FA8419B1768808600A04769 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				84A25890177837D3001AD208 /* AppMacros.h */,
+				84A2588A17783721001AD208 /* GameManager.cpp */,
+				84A2588B17783721001AD208 /* GameManager.h */,
+				84A2588C17783721001AD208 /* PlayerName.cpp */,
+				84A2588D17783721001AD208 /* PlayerName.h */,
 				848194EB177305070084A86B /* Menu.cpp */,
 				848194EC177305070084A86B /* Menu.h */,
 				0F729FF3176F0198000FE6E7 /* GameSprite.cpp */,
@@ -2567,6 +2579,8 @@
 				0FB5B2E61769792D00E2A745 /* MyContactListener.cpp in Sources */,
 				0F729FF5176F0198000FE6E7 /* GameSprite.cpp in Sources */,
 				848194ED177305070084A86B /* Menu.cpp in Sources */,
+				84A2588E17783721001AD208 /* GameManager.cpp in Sources */,
+				84A2588F17783721001AD208 /* PlayerName.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

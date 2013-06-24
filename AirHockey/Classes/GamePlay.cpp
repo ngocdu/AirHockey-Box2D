@@ -8,8 +8,10 @@
 #include "GamePlay.h"
 #include "SimpleAudioEngine.h"
 #include "Menu.h"
+#include "GameManager.h"
 using namespace cocos2d;
 using namespace CocosDenshion;
+using namespace std;
 
 #define PTM_RATIO 32
 
@@ -501,7 +503,9 @@ void GamePlay::ccTouchesEnded(CCSet* touches, CCEvent* event) {
 }
 
 void GamePlay::playerScore(int player) {
-    SimpleAudioEngine::sharedEngine()->playEffect("score.wav");
+    if (GameManager::sharedGameManager()->getBgm()) {
+        SimpleAudioEngine::sharedEngine()->playEffect("score.wav");
+    }
     char scoreBuff[10];
     
     if (player == 1) {
@@ -604,7 +608,8 @@ void GamePlay::addBgWin() {
     bgWin->setScaleX(1.15);
     this->addChild(bgWin,10);
     
-    CCLabelTTF *lbPoint = CCLabelTTF::create("Your Point", "Times New Roman", 54);
+    CCLabelTTF *lbPoint = CCLabelTTF::create(GameManager::sharedGameManager()->getName().c_str(),
+                                             "Times New Roman", 54);
     lbPoint->setPosition(ccp(bgWin->getContentSize().width / 2, bgWin->getContentSize().height - 100)) ;
     bgWin->addChild(lbPoint) ;
     
