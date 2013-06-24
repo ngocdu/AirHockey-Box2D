@@ -51,6 +51,13 @@ public:
     virtual void ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
     
     void update(float dt);
+    void handleProcess();
+    bool puckIsAtCorner();
+    void makeDecision();
+    void defense();
+    void attack();
+    
+    void _moveTo(float ox, float oy, float px, float py);
     
     b2Vec2 ptm(CCPoint point) {
         return b2Vec2(point.x / PTM_RATIO, point.y / PTM_RATIO);
@@ -111,6 +118,7 @@ private:
     cocos2d::CCTexture2D* m_pSpriteTexture; // weak ref
     
     b2MouseJoint *_mouseJoint;
+    b2MouseJoint *_mouseJoint2;
     
     MyContactListener *_contactListener;
     

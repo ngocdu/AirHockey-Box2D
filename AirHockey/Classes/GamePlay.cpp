@@ -209,9 +209,21 @@ GamePlay::GamePlay()
                                          _screenSize.height * 0.5 + 130));
     _player2ScoreLabel2->setRotation(90);
     this->addChild(_player2ScoreLabel2);
-
+    
+    b2MouseJointDef md;
+    md.bodyA = _groundBody;
+    md.bodyB = _player2Body;
+    md.target = this->ptm(_player2->getPosition());
+    md.collideConnected = true;
+    md.maxForce = 100000.0f * _player1Body->GetMass();
+    md.dampingRatio = 0;
+    md.frequencyHz = 1000;
+    
+    _mouseJoint2 = (b2MouseJoint *)world->CreateJoint(&md);
+    _player2Body->SetAwake(true);
     
     scheduleUpdate();
+    schedule(schedule_selector(GamePlay::handleProcess), 0.025);
 }
 
 GamePlay::~GamePlay()
@@ -239,19 +251,19 @@ void GamePlay::initPhysics()
     groundBodyDef.position.Set(0, 0);
     _groundBody = world->CreateBody(&groundBodyDef);
     
-    GamePlay::createEdge(0, 10, 210, 10, 0);
-    GamePlay::createEdge(s.width - 210, 10, s.width, 10, 0);
-    GamePlay::createEdge(210, 10, s.width - 210, 10, -10);
-    GamePlay::createEdge(210, 10, 210, 0, 0);
-    GamePlay::createEdge(s.width - 210, 10, s.width - 210, 0, 0);
-    GamePlay::createEdge(0, s.height - 10, 210, s.height - 10, 0);
-    GamePlay::createEdge(s.width - 210, s.height - 10, s.width, s.height - 10, 0);
-    GamePlay::createEdge(210, s.height - 10, s.width - 210, s.height - 10, -10);
-    GamePlay::createEdge(210, s.height - 10, 210, s.height, 0);
-    GamePlay::createEdge(s.width - 210, s.height - 10, s.width - 210, s.height, 0);
-    GamePlay::createEdge(10, s.height, 10, 0, 0);
-    GamePlay::createEdge(s.width - 10, s.height, s.width - 10, 0, 0);
-    GamePlay::createEdge(0, s.height/2, s.width, s.height/2, -10);
+    this->createEdge(0, 10, 210, 10, 0);
+    this->createEdge(s.width - 210, 10, s.width, 10, 0);
+    this->createEdge(210, 10, s.width - 210, 10, -10);
+    this->createEdge(210, 10, 210, 0, 0);
+    this->createEdge(s.width - 210, 10, s.width - 210, 0, 0);
+    this->createEdge(0, s.height - 10, 210, s.height - 10, 0);
+    this->createEdge(s.width - 210, s.height - 10, s.width, s.height - 10, 0);
+    this->createEdge(210, s.height - 10, s.width - 210, s.height - 10, -10);
+    this->createEdge(210, s.height - 10, 210, s.height, 0);
+    this->createEdge(s.width - 210, s.height - 10, s.width - 210, s.height, 0);
+    this->createEdge(10, s.height, 10, 0, 0);
+    this->createEdge(s.width - 10, s.height, s.width - 10, 0, 0);
+    this->createEdge(0, s.height/2, s.width, s.height/2, -10);
 }
 
 void GamePlay::createEdge(float x1, float y1,
@@ -313,25 +325,15 @@ void GamePlay::update(float dt)
         }
         
         if (_ball->getPositionY() >= s.height + _ball->getContentSize().height/2) {
-            GamePlay::playerScore(1);
-            GamePlay::gameReset();
+            this->playerScore(1);
+            this->gameReset();
         }
         
         if (_ball->getPositionY() <= -_ball->getContentSize().height/2) {
-            GamePlay::playerScore(2);
-            GamePlay::gameReset();
+            this->playerScore(2);
+            this->gameReset();
         }
 
-    }
-    
-    if (_ballY > s.height / 2) {
-        if (_player2->getPositionY() > s.height / 2)
-            _player2Body->SetLinearVelocity(
-                b2Vec2((_ballX - _player2->getPositionX())/10,
-                       (_ballY - _player2->getPositionY())/10));
-        else _player2Body->SetLinearVelocity(
-                b2Vec2((- _ballX + _player2->getPositionX())/10,
-                       (- _ballY + _player2->getPositionY())/10));
     }
     
     //-----------------when  finish game -------------------------------------------------
@@ -351,8 +353,75 @@ void GamePlay::update(float dt)
     }
 }
 
-void GamePlay::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event){
+void GamePlay::handleProcess() {
+    lastHit += 25;
+    if (lastHit >= 700) {
+        this->makeDecision();
+        lastHit = 0;
+    } else {
+        this->defense();
+    }
+}
 
+void GamePlay::makeDecision() {
+    _ballY = _ball->getPositionY();
+    CCLOG("%d", this->puckIsAtCorner());
+    if (!this->puckIsAtCorner()) {
+        if (_ballY > s.height - _ball->getContentSize().height) this->defense();
+        else {
+            if (_ballY >= 11 * s.height / 20) {
+                this->attack();
+            }
+        }
+    }
+}
+
+bool GamePlay::puckIsAtCorner() {
+    _ballX = _ball->getPositionX();
+    if (_ballX < s.width / 5 || _ballX > s.width * 4 / 5) {
+        return true;
+    }
+    return false;
+}
+
+void GamePlay::defense() {
+    float y = _ball->getPositionY();
+    float px = _player2->getPositionX();
+    float py = _player2->getPositionY();
+    if (py > y && s.width / 2 - px > s.width / 5) {
+        _player2Body->SetLinearVelocity(
+            this->ptm2(s.width * 2 / 5 - px,
+                       _player2->getContentSize().height - py));
+    }
+    if (py > y && - s.width / 2 + px > s.width / 5) {
+        _player2Body->SetLinearVelocity(
+            this->ptm2(s.width * 3 / 5 - px,
+                       _player2->getContentSize().height - py));
+    }
+}
+
+void GamePlay::attack() {
+    float x = _ball->getPositionX();
+    float y = _ball->getPositionY();
+    float px = _player2->getPositionX();
+    float py = _player2->getPositionY();
+    _player2Body->SetLinearVelocity(this->ptm2(px - x, py - y));
+}
+
+void GamePlay::_moveTo(float ox, float oy, float px, float py) {
+    float speed = s.width / (40 + rand() % 20);
+    float dx = px - ox;
+    float dy = py - oy;
+    float distance = sqrt(dx * dx + dy * dy);
+    
+    if (distance > speed) {
+        px = ox + speed / distance * dx;
+        py = oy + speed / distance * dy;
+    }
+    _mouseJoint2->SetTarget(this->ptm2(px, py));
+}
+
+void GamePlay::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
     if (_mouseJoint != NULL) return;
     CCTouch *touch = (CCTouch*)touches->anyObject() ;
     CCPoint tap = touch->getLocation();
@@ -530,7 +599,7 @@ void GamePlay::updateTime(float dt) {
 void GamePlay::addBgWin() {
     CCSize s = CCDirector::sharedDirector()->getWinSize() ;
     bgWin = CCSprite::create("Default.png");
-    bgWin->setPosition(ccp(s.width * 2 * (3.0f / 4), s.height / 2)) ;
+    bgWin->setPosition(ccp(s.width * 2 * (3.0f / 4) + 10, s.height / 2)) ;
     bgWin->setScaleY(1.1);
     bgWin->setScaleX(1.15);
     this->addChild(bgWin,10);
@@ -560,7 +629,7 @@ void GamePlay::addBgWin() {
 void GamePlay::addBgLose() {
     CCSize s = CCDirector::sharedDirector()->getWinSize() ;
     bgLose = CCSprite::create("Default.png");
-    bgLose->setPosition(ccp(s.width * 2 * (3.0f / 4), s.height / 2)) ;
+    bgLose->setPosition(ccp(s.width * 2 * (3.0f / 4) + 10, s.height / 2)) ;
     bgLose->setScaleY(1.1);
     bgLose->setScaleX(1.15);
     this->addChild(bgLose,10);
