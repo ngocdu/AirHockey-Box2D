@@ -65,7 +65,10 @@ public:
     void addBgLose();
     void moveBgWin(int i);
     void moveBgLose(int i);
+    void menuReplay(CCObject *psceene);
+    void menuMenu(CCObject *psceene);
     void rePlay();
+
     
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
@@ -122,13 +125,15 @@ private:
     //when finish
     CCSprite *bgWin;
     CCSprite *bgLose;
-    CCSprite *replayWin;
-    CCSprite *replayLose;
-    CCSprite *menuWin;
-    CCSprite *menuLose;
+    CCMenuItemImage *replayWin;
+    CCMenuItemImage *replayLose;
+    CCMenuItemImage *menuWin;
+    CCMenuItemImage *menuLose;
+    CCMenu *menuFinish;
     CCLabelTTF *lb_point;
     bool win ;
     bool lose ;
+
 };
 
 #endif // __GAME_PLAY_H__
