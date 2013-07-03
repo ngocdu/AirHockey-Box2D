@@ -9,6 +9,7 @@
 #include "Menu.h"
 #include "PlayerName.h"
 #include "GameManager.h"
+#include "RankingScene.h"
 using namespace cocos2d;
 CCScene* Menu::scene()
 {
@@ -34,7 +35,7 @@ bool Menu::init()
                                             "start.png",
                                             this,
                                             menu_selector(Menu::menuStartgame));
-    startMenuItem->setPosition(ccp((size.width / 2) - 20, size.height - 348));
+    startMenuItem->setPosition(ccp(size.width / 2.10989011, size.height / 1.5147929));
 
     //create rankMenuItem
     rankMenuItem = CCMenuItemImage::create(
@@ -42,7 +43,7 @@ bool Menu::init()
                                            "rank.png",
                                            this,
                                            menu_selector(Menu::menuRanking));
-    rankMenuItem->setPosition(ccp((size.width / 2) - 20, size.height - 487));
+    rankMenuItem->setPosition(ccp(size.width / 2.10989011, size.height / 1.90689013));
 
     //create BMGMenuItem
     bmgMenuItem = CCMenuItemImage::create(
@@ -50,7 +51,7 @@ bool Menu::init()
                                           "bgm.png",
                                           this,
                                           menu_selector(Menu::menuBGM));
-    bmgMenuItem->setPosition(ccp((size.width / 2) - 20, size.height - 635));
+    bmgMenuItem->setPosition(ccp(size.width / 2.10989011, size.height / 2.63239075));
 
     // create menu, it's an autorelease object
     CCMenu* pMenu = CCMenu::create(startMenuItem, rankMenuItem, bmgMenuItem, NULL);
@@ -81,6 +82,11 @@ void Menu::menuBGM(CCObject* pSender)
 }
 void Menu::menuRanking(CCObject* pSender)
 {
+    CCScene *rankScene = CCScene::create();
+    RankingScene *rankLayer = RankingScene::create();
+    rankScene->addChild(rankLayer);
+    CCScene *pScene = CCTransitionFadeTR::create(2, rankScene);
+    CCDirector::sharedDirector()->replaceScene(pScene);
 }
 void Menu::menuStartgame(CCObject* pSender)
 {
