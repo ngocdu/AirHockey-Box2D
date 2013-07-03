@@ -41,7 +41,7 @@ bool PlayerName::init()
                                  visibleOrigin.y + visibleSize.height * 3 / 4));
     m_pEditName->setFontSize(40);
     m_pEditName->setFontColor(ccRED);
-    m_pEditName->setPlaceHolder("Name:");
+    m_pEditName->setPlaceHolder("Player");
     m_pEditName->setPlaceholderFontColor(ccWHITE);
     m_pEditName->setMaxLength(15);
     m_pEditName->setReturnType(cocos2d::extension::kKeyboardReturnTypeDone);
@@ -87,26 +87,26 @@ void PlayerName::editBoxReturn(cocos2d::extension::CCEditBox* editBox)
 }
 void PlayerName::menuHard(CCObject *pSender)
 {
-    if (m_pEditName->getText() != "") {
+//    if (strcmp(m_pEditName->getText(), "") != 0) {
         GameManager::sharedGameManager()->setLevel(3);
         CCScene *gamePlayScene = GamePlay::scene();
         CCDirector::sharedDirector()->replaceScene(gamePlayScene);
-    }
+//    }
 }
 void PlayerName::menuMedium(CCObject *pSender)
 {
-    if (m_pEditName->getText() != "") {
-        GameManager::sharedGameManager()->setLevel(1);
-        CCScene *gamePlayScene = GamePlay::scene();
-        CCDirector::sharedDirector()->replaceScene(gamePlayScene);
-    }
-}
-void PlayerName::menuEasy(CCObject *pSender)
-{
-    if (m_pEditName->getText() != "") {
+//    if (strcmp(m_pEditName->getText(), "") != 0) {
         GameManager::sharedGameManager()->setLevel(2);
         CCScene *gamePlayScene = GamePlay::scene();
         CCDirector::sharedDirector()->replaceScene(gamePlayScene);
-    }
+//    }
+}
+void PlayerName::menuEasy(CCObject *pSender)
+{
+//    if (strcmp(m_pEditName->getText(), "") != 0) {
+        GameManager::sharedGameManager()->setLevel(1);
+        CCScene *gamePlayScene = GamePlay::scene();
+        CCDirector::sharedDirector()->replaceScene(gamePlayScene);
+//    }
 }
 

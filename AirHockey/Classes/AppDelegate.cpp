@@ -35,27 +35,27 @@ bool AppDelegate::applicationDidFinishLaunching()
     
 	CCSize screenSize = pEGLView->getFrameSize();
     CCSize designSize = CCSizeMake(768, 1024);
-//    std::vector<std::string> searchPaths;
-//    
-//    if (screenSize.height > 768)
-//    {
-//        searchPaths.push_back("hd");
-//        searchPaths.push_back("sd");
-//        pDirector->setContentScaleFactor(2);
-//    }
-//    else
-//    {
-//        searchPaths.push_back("sd");
-//        pDirector->setContentScaleFactor(1);
-//    }
-//    
-//    CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
+    std::vector<std::string> searchPaths;
+    
+    if (screenSize.height > 768)
+    {
+        searchPaths.push_back("hd");
+        searchPaths.push_back("sd");
+        pDirector->setContentScaleFactor(2);
+    }
+    else
+    {
+        searchPaths.push_back("sd");
+        pDirector->setContentScaleFactor(1);
+    }
+    
+    CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
     CCEGLView::sharedOpenGLView()->setDesignResolutionSize(designSize.width,
                                                            designSize.height,
                                                            kResolutionNoBorder);
     
     // turn on display FPS
-    pDirector->setDisplayStats(true);
+    pDirector->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     pDirector->setAnimationInterval(1.0 / 60);

@@ -86,7 +86,7 @@ void Menu::menuStartgame(CCObject* pSender)
 {
     CCScene *playerNameScene = PlayerName::scene();
     CCScene *pScene = CCTransitionFadeTR::create(2, playerNameScene);
-    CCDirector::sharedDirector()->replaceScene(pScene);
+    CCDirector::sharedDirector()->replaceScene(playerNameScene);
 }
 
 

@@ -51,9 +51,9 @@ public:
     virtual void ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
     
     void update(float dt);
+    
     void handleProcess();
-    bool puckIsAtCorner();
-    void makeDecision();
+    void wander();
     void defense();
     void attack();
     
@@ -73,10 +73,12 @@ public:
     void moveBgWin(int i);
     void moveBgLose(int i);
     void rePlay();
+    void drawReflectedRay(b2Vec2 p1, b2Vec2 p2);
     
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
     b2Body *_groundBody;
+    b2Body *_midleLineBody;
     b2Body *_player1Body;
     b2Body *_player2Body;
     b2Body *_ballBody;
@@ -84,7 +86,7 @@ private:
     b2Fixture *_player1Fixture;
     b2Fixture *_player2Fixture;
     b2Fixture *_ballFixture;
-    
+
     b2Fixture *lowerMiddle;
     b2Fixture *higherMiddle;
     
@@ -97,6 +99,9 @@ private:
     CCSprite *_player2ScoreLabel1;
     CCSprite *_player2ScoreLabel2;
     
+    CCLabelTTF *inp     = CCLabelTTF::create("I", "Arial", 32);
+    CCLabelTTF *outp    = CCLabelTTF::create("O", "Arial", 32);
+    
     int _player1Score = 0;
     int _sc1Tens;
     int _sc1SingleDigit;
@@ -104,13 +109,14 @@ private:
     int _sc2Tens;
     int _sc2SingleDigit;
     
-    float _ballX;
-    float _ballY;
-    
     float lastHit = 0;
+    float m_radius1;
+    float m_radius2;
+    float m_radius3;
     
     bool p1touched = false;
     bool p2touched = false;
+    bool attacked = false;
     
     CCArray *_players;
     
@@ -118,7 +124,6 @@ private:
     cocos2d::CCTexture2D* m_pSpriteTexture; // weak ref
     
     b2MouseJoint *_mouseJoint;
-    b2MouseJoint *_mouseJoint2;
     
     MyContactListener *_contactListener;
     

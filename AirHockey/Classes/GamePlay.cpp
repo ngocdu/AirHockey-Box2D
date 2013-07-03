@@ -15,62 +15,11 @@ using namespace std;
 
 #define PTM_RATIO 32
 
-enum {
-    kTagParentNode = 1,
-};
-
-PhysicsSprite::PhysicsSprite()
-: m_pBody(NULL)
-{
-
-}
-
-void PhysicsSprite::setPhysicsBody(b2Body * body)
-{
-    m_pBody = body;
-}
-
-// this method will only get called if the sprite is batched.
-// return YES if the physics values (angles, position ) changed
-// If you return NO, then nodeToParentTransform won't be called.
-bool PhysicsSprite::isDirty(void)
-{
-    return true;
-}
-
-// returns the transform matrix according the Chipmunk Body values
-CCAffineTransform PhysicsSprite::nodeToParentTransform(void)
-{
-    b2Vec2 pos  = m_pBody->GetPosition();
-
-    float x = pos.x * PTM_RATIO;
-    float y = pos.y * PTM_RATIO;
-
-    if ( isIgnoreAnchorPointForPosition() ) {
-        x += m_obAnchorPointInPoints.x;
-        y += m_obAnchorPointInPoints.y;
-    }
-
-    // Make matrix
-    float radians = m_pBody->GetAngle();
-    float c = cosf(radians);
-    float s = sinf(radians);
-
-    if( ! m_obAnchorPointInPoints.equals(CCPointZero) ){
-        x += c*-m_obAnchorPointInPoints.x + -s*-m_obAnchorPointInPoints.y;
-        y += s*-m_obAnchorPointInPoints.x + c*-m_obAnchorPointInPoints.y;
-    }
-
-    // Rot, Translate Matrix
-    m_sTransform = CCAffineTransformMake( c,  s,
-        -s,    c,
-        x,    y );
-
-    return m_sTransform;
-}
+#pragma mark GamePlay Init
 
 GamePlay::GamePlay()
 {
+    srand(time(NULL));
     setTouchEnabled( true );
     setAccelerometerEnabled( true );
     _mouseJoint = NULL;
@@ -108,10 +57,9 @@ GamePlay::GamePlay()
 
     _player1Score = 0;
     _player2Score = 0;
-    _screenSize = CCDirector::sharedDirector()->getWinSize();
     
     CCSprite *court = CCSprite::create("court.png");
-    court->setPosition(ccp(_screenSize.width * 0.5, _screenSize.height * 0.5));
+    court->setPosition(ccp(s.width * 0.5, s.height * 0.5));
     this->addChild(court);
     
     _player1 = GameSprite::gameSpriteWidthFile("mallet1.png");
@@ -119,15 +67,14 @@ GamePlay::GamePlay()
     this->addChild(_player1, 1);
     b2BodyDef player1BodyDef;
     player1BodyDef.type = b2_dynamicBody;
-    player1BodyDef.position.Set(_screenSize.width * 0.5 / PTM_RATIO,
+    player1BodyDef.position.Set(s.width * 0.5 / PTM_RATIO,
                                 _player1->getContentSize().width / PTM_RATIO );
     player1BodyDef.userData = _player1;
-    player1BodyDef.linearDamping =5.0f;
+    player1BodyDef.linearDamping = 5.0f;
     _player1Body = world->CreateBody(&player1BodyDef);
     b2FixtureDef player1FixtureDef;
     b2CircleShape circle1;
-    float m_radius1 = _player1->getContentSize().height/2;
-        CCLOG("radius2: %f", m_radius1);
+    m_radius1 = _player1->getContentSize().height/2;
     circle1.m_radius = m_radius1/PTM_RATIO;
     player1FixtureDef.shape = &circle1;
     player1FixtureDef.density = 1.1f;
@@ -137,24 +84,24 @@ GamePlay::GamePlay()
     
     
     _player2 = GameSprite::gameSpriteWidthFile("mallet2.png");
-    _player2->setTag(99);
+    _player2->setTag(98);
     this->addChild(_player2, 1);
     b2BodyDef player2BodyDef;
     player2BodyDef.type = b2_dynamicBody;
-    player2BodyDef.position.Set(_screenSize.width * 0.5 / PTM_RATIO,
-                                (_screenSize.height -
-                                 _player2->getContentSize().width) / PTM_RATIO);
+    player2BodyDef.position.Set(
+        s.width / 5 / PTM_RATIO,
+        (s.height - _player2->getContentSize().height / 2) / PTM_RATIO);
     player2BodyDef.userData = _player2;
-    player2BodyDef.linearDamping =5.0f;
+    player2BodyDef.linearDamping = 2.0f;
     _player2Body = world->CreateBody(&player2BodyDef);
     b2FixtureDef player2FixtureDef;
     b2CircleShape circle2;
-    float m_radius2 = _player2->getContentSize().height/2;
+    m_radius2 = _player2->getContentSize().height/2;
     circle2.m_radius = m_radius2/PTM_RATIO;
     player2FixtureDef.shape = &circle2;
     player2FixtureDef.density = 1.1f;
     player2FixtureDef.friction = 0.3f;
-    player2FixtureDef.restitution=  0.0f;
+    player2FixtureDef.restitution = 0.0f;
     _player2Fixture = _player2Body->CreateFixture(&player2FixtureDef);
     
     
@@ -163,14 +110,14 @@ GamePlay::GamePlay()
     b2BodyDef ballBodyDef;
     ballBodyDef.type = b2_dynamicBody;
     ballBodyDef.linearDamping = 0.3f;
-    ballBodyDef.position.Set(_screenSize.width/2/PTM_RATIO,
-                             _screenSize.height/2/PTM_RATIO);
+    ballBodyDef.position.Set(s.width/2/PTM_RATIO,
+                             s.height/2/PTM_RATIO);
     ballBodyDef.userData = _ball;
     ballBodyDef.bullet = true;
     _ballBody = world->CreateBody(&ballBodyDef);
     b2FixtureDef ballFixtureDef;
     b2CircleShape circle3;
-    float m_radius3 = _ball->getContentSize().height/2;
+    m_radius3 = _ball->getContentSize().height/2;
     circle3.m_radius = m_radius3/PTM_RATIO;
     ballFixtureDef.shape = &circle3;
     ballFixtureDef.density = 1.0f;
@@ -188,55 +135,54 @@ GamePlay::GamePlay()
     
     _player1ScoreLabel1 = CCSprite::createWithSpriteFrameName("0.png");
     _player1ScoreLabel1->setScale(0.7);
-    _player1ScoreLabel1->setPosition(ccp(_screenSize.width - 115,
-                                        _screenSize.height * 0.5 - 125));
+    _player1ScoreLabel1->setPosition(ccp(s.width - 115,
+                                        s.height * 0.5 - 125));
     _player1ScoreLabel1->setRotation(90);
     this->addChild(_player1ScoreLabel1);
     _player1ScoreLabel2 = CCSprite::createWithSpriteFrameName("0.png");
     _player1ScoreLabel2->setScale(0.7);
-    _player1ScoreLabel2->setPosition(ccp(_screenSize.width - 115,
-                                         _screenSize.height * 0.5 - 95));
+    _player1ScoreLabel2->setPosition(ccp(s.width - 115,
+                                         s.height * 0.5 - 95));
     _player1ScoreLabel2->setRotation(90);
     this->addChild(_player1ScoreLabel2);
     
     _player2ScoreLabel1 = CCSprite::createWithSpriteFrameName("0.png");
     _player2ScoreLabel1->setScale(0.7);
-    _player2ScoreLabel1->setPosition(ccp(_screenSize.width - 115,
-                                        _screenSize.height * 0.5 + 100));
+    _player2ScoreLabel1->setPosition(ccp(s.width - 115,
+                                        s.height * 0.5 + 100));
     _player2ScoreLabel1->setRotation(90);
     this->addChild(_player2ScoreLabel1);
     _player2ScoreLabel2 = CCSprite::createWithSpriteFrameName("0.png");
     _player2ScoreLabel2->setScale(0.7);
-    _player2ScoreLabel2->setPosition(ccp(_screenSize.width - 115,
-                                         _screenSize.height * 0.5 + 130));
+    _player2ScoreLabel2->setPosition(ccp(s.width - 115,
+                                         s.height * 0.5 + 130));
     _player2ScoreLabel2->setRotation(90);
     this->addChild(_player2ScoreLabel2);
     
-    b2MouseJointDef md;
-    md.bodyA = _groundBody;
-    md.bodyB = _player2Body;
-    md.target = this->ptm(_player2->getPosition());
-    md.collideConnected = true;
-    md.maxForce = 100000.0f * _player1Body->GetMass();
-    md.dampingRatio = 0;
-    md.frequencyHz = 1000;
-    
-    _mouseJoint2 = (b2MouseJoint *)world->CreateJoint(&md);
-    _player2Body->SetAwake(true);
-    
-    scheduleUpdate();
+    this->addChild(inp);
+    this->addChild(outp);
+//    b2Vec2 p1 = _ballBody->GetPosition();
+////    float x2 = _ballBody->GetPosition().x * (1 + _ballBody->GetLinearVelocity().x);
+////    float y2 = _ballBody->GetPosition().y * (1 + _ballBody->GetLinearVelocity().y);
+////    b2Vec2 p2(x2, y2);
+//    b2Vec2 p2 = this->ptm2(200, 100);
+//    this->drawReflectedRay(p1, p2);
+
+
+    schedule(schedule_selector(GamePlay::update));
     schedule(schedule_selector(GamePlay::handleProcess), 0.025);
 }
 
 GamePlay::~GamePlay()
 {
-    delete world;
-    world = NULL;
+    CC_SAFE_DELETE(world);
+    _groundBody = NULL;
+    delete _contactListener;
     
     //delete m_debugDraw;
 }
 
-
+#pragma mark Create Ground
 
 void GamePlay::initPhysics()
 {
@@ -246,6 +192,8 @@ void GamePlay::initPhysics()
     world->SetAllowSleeping(true);
     world->SetContinuousPhysics(true);
 
+    _contactListener = new MyContactListener();
+    world->SetContactListener(_contactListener);
     uint32 flags = 0;
     flags += b2Draw::e_shapeBit;
     
@@ -263,14 +211,27 @@ void GamePlay::initPhysics()
     this->createEdge(210, s.height - 10, s.width - 210, s.height - 10, -10);
     this->createEdge(210, s.height - 10, 210, s.height, 0);
     this->createEdge(s.width - 210, s.height - 10, s.width - 210, s.height, 0);
-    this->createEdge(10, s.height, 10, 0, 0);
+    this->createEdge(10, s.height, 10, 0, 0);                                                                                                                                   
     this->createEdge(s.width - 10, s.height, s.width - 10, 0, 0);
-    this->createEdge(0, s.height/2, s.width, s.height/2, -10);
+//    this->createEdge(0, s.height/2, s.width, s.height/2, -10);
+    
+    
+    b2BodyDef midleLineDef;
+    midleLineDef.position.Set(0, 0);
+    _midleLineBody = world->CreateBody(&midleLineDef);
+    b2EdgeShape midleEdgeShape;
+    midleEdgeShape.Set(b2Vec2(0, s.height / 2 / PTM_RATIO),
+                        b2Vec2(s.width / PTM_RATIO, s.height / 2 / PTM_RATIO));
+    b2FixtureDef midleEdgeDef;
+    midleEdgeDef.shape = &midleEdgeShape;
+    midleEdgeDef.filter.groupIndex = -10;
+    _midleLineBody->CreateFixture(&midleEdgeDef);
+    
 }
 
 void GamePlay::createEdge(float x1, float y1,
-                            float x2, float y2,
-                            int groupIndex) {
+                          float x2, float y2,
+                          int groupIndex) {
     b2EdgeShape groundEdgeShape;
     groundEdgeShape.Set(b2Vec2(x1 / PTM_RATIO, y1 / PTM_RATIO),
                         b2Vec2(x2 / PTM_RATIO, y2 / PTM_RATIO));
@@ -280,16 +241,11 @@ void GamePlay::createEdge(float x1, float y1,
     _groundBody->CreateFixture(&groundEdgeDef);
 }
 
-
+#pragma mark DRAW
 void GamePlay::draw()
 {
-    //
-    // IMPORTANT:
-    // This is only for debug purposes
-    // It is recommend to disable it
-    //
     CCLayer::draw();
-
+    
     ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position );
 
     kmGLPushMatrix();
@@ -297,8 +253,11 @@ void GamePlay::draw()
     world->DrawDebugData();
 
     kmGLPopMatrix();
+    
+
 }
 
+#pragma mark Update
 
 void GamePlay::update(float dt)
 {
@@ -306,12 +265,8 @@ void GamePlay::update(float dt)
         int velocityIterations = 8;
         int positionIterations = 3;
         
-        
-        // Instruct the world to perform a single step of simulation. It is
-        // generally best to keep the time step and iterations fixed.
         world->Step(dt, velocityIterations, positionIterations);
         
-        //Iterate over the bodies in the physics world
         for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
         {
             if (b->GetUserData() != NULL) {
@@ -322,10 +277,17 @@ void GamePlay::update(float dt)
                     b->SetLinearVelocity(b2Vec2(0, 0));
                     b->SetFixedRotation(true);
                 }
+                if (myActor->getTag() == 98 &&
+                    myActor->getPositionX() == s.width / 2 &&
+                    myActor->getPositionY() <= myActor->getContentSize().width) {
+                    b->SetLinearVelocity(b2Vec2(0, 0));
+                    b->SetFixedRotation(true);
+                }
                 
             }
         }
         
+        #pragma mark Goal !!!
         if (_ball->getPositionY() >= s.height + _ball->getContentSize().height/2) {
             this->playerScore(1);
             this->gameReset();
@@ -338,7 +300,7 @@ void GamePlay::update(float dt)
 
     }
     
-    //-----------------when  finish game -------------------------------------------------
+        #pragma mark When Finish Game
     if ((minutes == 0 && seconds == 0) || _player1Score == 3 || _player2Score == 3) {
         playing = false ;
         this->unscheduleAllSelectors() ;
@@ -353,53 +315,69 @@ void GamePlay::update(float dt)
             lose = true;
         }
     }
+    
+    std::vector<MyContact>::iterator pos;
+    for(pos = _contactListener->_contacts.begin();
+        pos != _contactListener->_contacts.end(); ++pos) {
+        MyContact contact = *pos;
+        
+        if ((contact.fixtureA == _ballFixture && contact.fixtureB == _player2Fixture) ||
+            (contact.fixtureA == _player2Fixture && contact.fixtureB == _ballFixture)) {
+            attacked = true;
+            float px = _player2->getPositionX();
+            float py = _player2->getPositionY();
+            _player2Body->ApplyLinearImpulse(
+                                             b2Vec2(s.width / 2 - px, s.height - _player2->radius() - py),
+                                             _player2Body->GetWorldCenter());
+        }
+    }
+    
+//    b2Vec2 p1 = this->ptm(_ball->getPosition());
+//    float x2 = _ball->getPositionX() * (1 + _ballBody->GetLinearVelocity().x);
+//    float y2 = _ball->getPositionY() * (1 + _ballBody->GetLinearVelocity().y);
+//    b2Vec2 p2 = this->ptm2(x2, y2);
+//    this->drawReflectedRay(p1, p2);
+    
 }
+
+#pragma mark AI Player
 
 void GamePlay::handleProcess() {
     lastHit += 25;
-    if (lastHit >= 700) {
-        this->makeDecision();
-        lastHit = 0;
+    float y   = _ball->getPositionY();
+    float py = _player2->getPositionY();
+    
+    if (lastHit >= 500) {
+        if (py > y && y > s.height / 2) {
+            this->attack();
+            lastHit = 0;
+            this->defense();
+        }
     } else {
         this->defense();
     }
+    
 }
 
-void GamePlay::makeDecision() {
-    _ballY = _ball->getPositionY();
-    CCLOG("%d", this->puckIsAtCorner());
-    if (!this->puckIsAtCorner()) {
-        if (_ballY > s.height - _ball->getContentSize().height) this->defense();
-        else {
-            if (_ballY >= 11 * s.height / 20) {
-                this->attack();
-            }
-        }
+void GamePlay::wander() {
+    if ((int)lastHit % 500 == 0) {
+        float vx = rand() % 10000 - 5000;
+        float vy = _player2->radius();
+        
+        _player2Body->ApplyLinearImpulse(this->ptm2(vx, vy),
+                                         _player2Body->GetWorldCenter());
     }
 }
 
-bool GamePlay::puckIsAtCorner() {
-    _ballX = _ball->getPositionX();
-    if (_ballX < s.width / 5 || _ballX > s.width * 4 / 5) {
-        return true;
-    }
-    return false;
-}
 
 void GamePlay::defense() {
-    float y = _ball->getPositionY();
     float px = _player2->getPositionX();
     float py = _player2->getPositionY();
-    if (py > y && s.width / 2 - px > s.width / 5) {
-        _player2Body->SetLinearVelocity(
-            this->ptm2(s.width * 2 / 5 - px,
-                       _player2->getContentSize().height - py));
-    }
-    if (py > y && - s.width / 2 + px > s.width / 5) {
-        _player2Body->SetLinearVelocity(
-            this->ptm2(s.width * 3 / 5 - px,
-                       _player2->getContentSize().height - py));
-    }
+
+    if (py > s.height / 2)
+    _player2Body->ApplyLinearImpulse(
+            b2Vec2(s.width / 2 - px, s.height - _player2->radius() - py),
+            _player2Body->GetWorldCenter());
 }
 
 void GamePlay::attack() {
@@ -407,27 +385,17 @@ void GamePlay::attack() {
     float y = _ball->getPositionY();
     float px = _player2->getPositionX();
     float py = _player2->getPositionY();
-    _player2Body->SetLinearVelocity(this->ptm2(px - x, py - y));
+//    _player2Body->SetLinearVelocity(b2Vec2(0, 0));
+    _player2Body->ApplyLinearImpulse(b2Vec2(10 * (x - px), 10 * (y - py)),
+                                    _player2Body->GetWorldCenter());
 }
 
-void GamePlay::_moveTo(float ox, float oy, float px, float py) {
-    float speed = s.width / (40 + rand() % 20);
-    float dx = px - ox;
-    float dy = py - oy;
-    float distance = sqrt(dx * dx + dy * dy);
-    
-    if (distance > speed) {
-        px = ox + speed / distance * dx;
-        py = oy + speed / distance * dy;
-    }
-    _mouseJoint2->SetTarget(this->ptm2(px, py));
-}
-
-void GamePlay::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+#pragma mark Touches Handle
+void GamePlay::ccTouchesBegan(CCSet* touches, CCEvent* event) {
     if (_mouseJoint != NULL) return;
     CCTouch *touch = (CCTouch*)touches->anyObject() ;
     CCPoint tap = touch->getLocation();
-    b2Vec2 locationWorld = GamePlay::ptm(tap);
+    b2Vec2 locationWorld = this->ptm(tap);
     
     CCPoint location = tap;
     
@@ -449,10 +417,10 @@ void GamePlay::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event) 
         if (win == true) {
             int kcPlayWin = ccpDistance(location, ccp(this->replayWin->getPosition().x, this->replayWin->getPosition().y));
             int kcMenuWin = ccpDistance(location, ccp(this->menuWin->getPosition().x, this->menuWin->getPosition().y));
-            CCLog("YP: %i", this->replayWin->getPosition().y);
-            CCLog("YM: %i", this->menuWin->getPosition().y);
-            CCLog("YT: %f", location.y);
-            CCLog("wP: %f", replayWin->getContentSize().width/2);
+//            CCLog("YP: %i", this->replayWin->getPosition().y);
+//            CCLog("YM: %i", this->menuWin->getPosition().y);
+//            CCLog("YT: %f", location.y);
+//            CCLog("wP: %f", replayWin->getContentSize().width/2);
             if (kcMenuWin <= menuWin->getContentSize().width/2) {
                 this->moveBgWin(0);
                 win = false;
@@ -486,11 +454,11 @@ void GamePlay::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event) 
     }
 }
 
-void GamePlay::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+void GamePlay::ccTouchesMoved(CCSet* touches, CCEvent* event) {
     if (_mouseJoint == NULL) return;
     CCTouch  *myTouch = (CCTouch *)touches->anyObject();
     CCPoint location = myTouch->getLocation();
-    b2Vec2 locationWorld = GamePlay::ptm(location);
+    b2Vec2 locationWorld = this->ptm(location);
     _mouseJoint->SetTarget(locationWorld);
 
 }
@@ -501,6 +469,8 @@ void GamePlay::ccTouchesEnded(CCSet* touches, CCEvent* event) {
         _mouseJoint = NULL;
     }
 }
+
+#pragma mark Score Counter
 
 void GamePlay::playerScore(int player) {
     if (GameManager::sharedGameManager()->getBgm()) {
@@ -523,8 +493,8 @@ void GamePlay::playerScore(int player) {
         
         
         _ballBody->SetLinearVelocity(b2Vec2(0, 0));
-        _ballBody->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
-                                       (_screenSize.height/2 -
+        _ballBody->SetTransform(b2Vec2(s.width/2/PTM_RATIO,
+                                       (s.height/2 -
                                         _ball->getContentSize().width/2)/PTM_RATIO), 0);
     }
     if (player == 2) {
@@ -541,24 +511,26 @@ void GamePlay::playerScore(int player) {
         _player2ScoreLabel2->setTexture(singleDigit->getTexture());
         
         _ballBody->SetLinearVelocity(b2Vec2(0, 0));
-        _ballBody->SetTransform(b2Vec2(_screenSize.width/2/PTM_RATIO,
-                                       (_screenSize.height/2 -
+        _ballBody->SetTransform(b2Vec2(s.width/2/PTM_RATIO,
+                                       (s.height/2 -
                                         _ball->getContentSize().width/2)/PTM_RATIO), 0);
     }
     
 }
 
+#pragma mark Reset Game
+
 void GamePlay::gameReset()
 {
     this->playing = true;
     _player1Body->SetLinearVelocity(b2Vec2(0, 0));
-    _player1Body->SetTransform(GamePlay::ptm2(_screenSize.width/2,
+    _player1Body->SetTransform(GamePlay::ptm2(s.width/2,
                     _player1->getContentSize().width), 0);
     
     _player2Body->SetLinearVelocity(b2Vec2(0, 0));
 
-    _player2Body->SetTransform(GamePlay::ptm2(_screenSize.width/2,
-                    _screenSize.height -_player2->getContentSize().width), 0);
+    _player2Body->SetTransform(GamePlay::ptm2(s.width/2,
+                    s.height -_player2->getContentSize().width), 0);
 
     if (_mouseJoint != NULL) {
         world->DestroyJoint(_mouseJoint);
@@ -566,17 +538,61 @@ void GamePlay::gameReset()
     }
 }
 
-CCScene* GamePlay::scene()
+#pragma mark RayCast
+//new function for FooTest class
+void GamePlay::drawReflectedRay(b2Vec2 p1, b2Vec2 p2)
 {
-    // 'scene' is an autorelease object
-    CCScene *scene = CCScene::create();
+    inp->setPosition(ccp(p1.x * PTM_RATIO, p1.y * PTM_RATIO));
+    outp->setPosition(ccp(p2.x * PTM_RATIO, p2.y * PTM_RATIO));
+    CCLOG("p1 & p2: (%f %f) (%f %f)",
+       p1.x * PTM_RATIO,
+       p1.y * PTM_RATIO,
+       p2.x * PTM_RATIO,
+       p2.y * PTM_RATIO);
+    //set up input
+    b2RayCastInput input;
+    input.p1 = p1;
+    input.p2 = p2;
+    input.maxFraction = 5;
+
+    float closestFraction = 5;
+    b2Vec2 intersectionNormal(0,0);
     
-    // add layer as a child to scene
-    CCLayer* layer = new GamePlay();
-    scene->addChild(layer);
-    layer->release();
+    for (b2Fixture* f = _groundBody->GetFixtureList(); f;  f = f->GetNext()) {
+        b2RayCastOutput output;
+        if ( !f->RayCast( &output, input, 0) )
+            continue;
+        if ( output.fraction < closestFraction ) {
+            closestFraction = output.fraction;
+            CCLOG("Closest Fraction: %f", closestFraction);
+            intersectionNormal = output.normal;
+            CCLOG("Nomal Vector: %f %f", output.normal.x,
+                  output.normal.y);
+            b2Vec2 i = p1 + closestFraction * (p2 - p1);
+            CCLOG("collision: (%f %f)",
+                  i.x * PTM_RATIO,
+                  i.y * PTM_RATIO
+                  );
+        }
+    }
     
-    return scene;
+    b2Vec2 intersectionPoint = p1 + closestFraction * (p2 - p1);
+    
+    if ( closestFraction == 10 )
+        return;
+    if ( closestFraction == 0 )
+        return;
+    
+    //still some ray left to reflect
+    b2Vec2 remainingRay = (p1 + 5 * (p2 - p1) - intersectionPoint);
+    b2Vec2 projectedOntoNormal = b2Dot(remainingRay, intersectionNormal) * intersectionNormal;
+    b2Vec2 nextp2 = p2 - 2 * projectedOntoNormal;
+//    CCLOG("Next: (%f %f)",
+//          intersectionPoint.x * PTM_RATIO,
+//          intersectionPoint.y * PTM_RATIO
+//          );
+    //recurse
+    this->drawReflectedRay(intersectionPoint, nextp2);
 }
 
 void GamePlay::updateTime(float dt) {
@@ -743,6 +759,22 @@ void GamePlay::rePlay() {
     _player2ScoreLabel2->setTextureRect(singleDigit2->getTextureRect());
     _player2ScoreLabel2->setTexture(singleDigit2->getTexture());
 
-    this->scheduleUpdate();
-    this->schedule(schedule_selector(GamePlay::updateTime), 1);
+    scheduleUpdate();
+    schedule(schedule_selector(GamePlay::updateTime), 1);
+    schedule(schedule_selector(GamePlay::handleProcess), 0.025);
+}
+
+#pragma mark GamePlay Scene
+
+CCScene* GamePlay::scene()
+{
+    // 'scene' is an autorelease object
+    CCScene *scene = CCScene::create();
+    
+    // add layer as a child to scene
+    CCLayer* layer = new GamePlay();
+    scene->addChild(layer);
+    layer->release();
+    
+    return scene;
 }
