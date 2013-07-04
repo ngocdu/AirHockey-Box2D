@@ -9,8 +9,13 @@
 #include "SimpleAudioEngine.h"
 #include "Menu.h"
 #include "GameManager.h"
+#include "HttpClient.h"
+#include "rapidjson.h"
+#include "document.h"
+#include "InputEmail.h"
 using namespace cocos2d;
 using namespace CocosDenshion;
+using namespace cocos2d::extension;
 using namespace std;
 
 #define PTM_RATIO 32
@@ -228,7 +233,7 @@ void GamePlay::createEdge(float x1, float y1,
                         b2Vec2(x2 / PTM_RATIO, y2 / PTM_RATIO));
     b2FixtureDef groundEdgeDef;
     groundEdgeDef.shape = &groundEdgeShape;
-    groundEdgeDef.restitution = 0.1;
+    groundEdgeDef.restitution = 0.9;
     groundEdgeDef.filter.groupIndex = groupIndex;
     _groundBody->CreateFixture(&groundEdgeDef);
 }
@@ -278,7 +283,7 @@ void GamePlay::update(float dt)
                     myActor->getPositionY() >= h - myActor->getContentSize().height / 2 - 20
                     &&
                     b->GetLinearVelocity().y  >= 0) {
-                        b->SetLinearVelocity(b2Vec2(0, 0));
+                        b->SetAwake(false);
                         b->SetFixedRotation(true);
                     }
                     if (myActor->getPositionY() <= h / 2 + _ball->getContentSize().height) {
@@ -301,7 +306,7 @@ void GamePlay::update(float dt)
     }
     
         #pragma mark When Finish Game
-    if ((minutes == 0 && seconds == 0) || _player1Score == 3 || _player2Score == 3) {
+    if ((minutes == 0 && seconds == 0) || _player1Score == 7 || _player2Score == 7) {
         playing = false ;
         this->unscheduleAllSelectors() ;
         this->unscheduleUpdate() ;
@@ -314,6 +319,20 @@ void GamePlay::update(float dt)
             this->moveBgLose(1) ;
             lose = true;
         }
+        //---------send request to server ------------
+        CCHttpRequest* request = new CCHttpRequest();
+        int p = (_player1Score + 1) * (180 - (minutes * 60 + seconds)) * (GameManager::sharedGameManager()->getLevel() * 2000);
+        GameManager::sharedGameManager()->setPoint(p);
+        string name = GameManager::sharedGameManager()->getName();
+        char strP[20] = {0};
+        sprintf(strP, "%i", p);
+        string url = "http://localhost:3000/users?name="+name+"&point="+strP+"&email=ngocduk54a2@gmail.com"+"&reward=0";
+        request->setUrl(url.c_str());
+        request->setRequestType(CCHttpRequest::kHttpPost);
+        CCHttpClient::getInstance()->send(request);
+        request->release();
+        
+        this->checkHightScore();
     }
     
     
@@ -336,7 +355,9 @@ void GamePlay::update(float dt)
             this->defenseCenter();
         }
     }
-    
+    if (lastHit >= 450) {
+        this->defenseCenter();
+    }
 }
 
 #pragma mark AI Player
@@ -350,7 +371,7 @@ void GamePlay::handleProcess() {
     float vy = _ballBody->GetLinearVelocity().y;
     float br = _ball->getContentSize().width / 2;
     
-    if (lastHit >= 300) {
+    if (lastHit >= 450) {
         if ((y >= h / 2 - br && y <= 3 * h /4) ||
             (y > 3 * h / 4 && x > w / 2 && x < 3 * w / 4)) {
             this->attack();
@@ -371,6 +392,74 @@ void GamePlay::wander() {
     }
 }
 
+void GamePlay::checkHightScore() {
+    CCHttpRequest* request = new CCHttpRequest();
+    request->setUrl("http://localhost:3000/users.json");
+    request->setRequestType(CCHttpRequest::kHttpGet);
+    request->setResponseCallback(this, callfuncND_selector(GamePlay::onHttpRequestCompleted));
+    CCHttpClient::getInstance()->send(request);
+    request->release();
+}
+void GamePlay::onHttpRequestCompleted(CCNode *sender, void *data)
+{
+    CCSize size = CCDirector::sharedDirector()->getWinSize();
+    CCHttpResponse *response = (CCHttpResponse*)data;
+    
+    if (!response)
+    {
+        return;
+    }
+    
+    int statusCode = response->getResponseCode();
+    char statusString[64] = {};
+    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    
+    if (!response->isSucceed())
+    {
+        
+        CCLabelTTF *notConnectLabel =
+        CCLabelTTF::create("PLEASE CHECK YOUR INTERNET CONNECTION", "Time new roman",
+                           30);
+        notConnectLabel->setPosition(ccp(size.width / 2, size.height / 2));
+        this->addChild(notConnectLabel);
+        return;
+    }
+    
+    // dump data
+    std::vector<char> *buffer = response->getResponseData();
+    char * data2 = (char*)(malloc(buffer->size() *  sizeof(char)));
+    int d = -1;
+    printf("Http Test, dump data: ");
+    for (unsigned int i = 0; i < buffer->size(); i++)
+    {
+        d++ ;
+        data2[d] = (*buffer)[i];
+    }
+    data2[d + 1] = '\0';
+    //-----------------------
+    rapidjson::Document document;
+    if(data2 != NULL && !document.Parse<0>(data2).HasParseError())
+    {
+        string name = GameManager::sharedGameManager()->getName();
+        int point = (_player1Score + 1) * (180 - (minutes * 60 + seconds)) *
+           (GameManager::sharedGameManager()->getLevel() * 2000);
+        for (rapidjson::SizeType  i = 0; i < document.Size(); i++)
+        {
+            if (document[i]["name"].GetString() == name &&
+                point == document[i]["point"].GetInt() &&
+                document[i]["reward"].GetInt() != 0) {
+                CCDirector::sharedDirector()->replaceScene(InputEmail::scene());
+                break;
+            }
+        }
+    }
+    else
+    {
+        CCLog(document.GetParseError());
+    }
+    d = -1;
+    delete []data2;
+}
 
 void GamePlay::defenseLeft() {
     float px = _player2->getPositionX();
@@ -407,8 +496,16 @@ void GamePlay::attack() {
     float y = _ball->getPositionY();
     float px = _player2->getPositionX();
     float py = _player2->getPositionY();
-    _player2Body->ApplyLinearImpulse(b2Vec2(17 * (x - px), 17 * (10 + y - py)),
+    float vx = _ballBody->GetLinearVelocity().x;
+    float vy = _ballBody->GetLinearVelocity().y;
+    float br = _ball->getContentSize().width / 2;
+    
+    float cx = (h - 10 - br - y) * vx / vy + x;
+    
+    if ((cx > w / 4 && cx < w * 3 / 4) || (vx < 5 && vy < 5))
+    _player2Body->ApplyLinearImpulse(b2Vec2(17*(x - px), 17*(10 + y - py)),
                                     _player2Body->GetWorldCenter());
+    else _player2Body->SetLinearVelocity(b2Vec2((x/2 + w/4 - px) / 5, 0));
 }
 
 #pragma mark Touches Handle
@@ -438,10 +535,6 @@ void GamePlay::ccTouchesBegan(CCSet* touches, CCEvent* event) {
         if (win == true) {
             int kcPlayWin = ccpDistance(location, ccp(this->replayWin->getPosition().x, this->replayWin->getPosition().y));
             int kcMenuWin = ccpDistance(location, ccp(this->menuWin->getPosition().x, this->menuWin->getPosition().y));
-//            CCLog("YP: %i", this->replayWin->getPosition().y);
-//            CCLog("YM: %i", this->menuWin->getPosition().y);
-//            CCLog("YT: %f", location.y);
-//            CCLog("wP: %f", replayWin->getContentSize().width/2);
             if (kcMenuWin <= menuWin->getContentSize().width/2) {
                 this->moveBgWin(0);
                 win = false;

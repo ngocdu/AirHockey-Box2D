@@ -77,6 +77,9 @@ public:
     void rePlay();
     void drawReflectedRay(b2Vec2 p1, b2Vec2 p2);
     
+    void checkHightScore();
+    void onHttpRequestCompleted(CCNode *sender, void *data);
+    
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
     float h = s.height;

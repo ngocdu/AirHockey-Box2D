@@ -40,6 +40,16 @@ void GameManager::setName(string name)
 {
     this->name = name;
 }
+
+string GameManager::getEmail()
+{
+    return this->email;
+}
+void GameManager::setEmail(string email)
+{
+    this->email = email;
+}
+
 int GameManager::getLevel()
 {
     return this->level;
@@ -47,4 +57,13 @@ int GameManager::getLevel()
 void GameManager::setLevel(int lever)
 {
     this->level = lever;
+}
+
+int GameManager::getPoint()
+{
+    return this->point;
+}
+void GameManager::setPoint(int point)
+{
+    this->point = point;
 }
