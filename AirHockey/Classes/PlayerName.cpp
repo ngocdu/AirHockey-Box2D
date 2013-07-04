@@ -66,23 +66,23 @@ bool PlayerName::init()
 }
 void PlayerName::editBoxEditingDidBegin(cocos2d::extension::CCEditBox* editBox)
 {
-    CCLog("editBox %p DidBegin !", editBox);
+    //CCLog("editBox %p DidBegin !", editBox);
 }
 
 void PlayerName::editBoxEditingDidEnd(cocos2d::extension::CCEditBox* editBox)
 {
-    CCLog("editBox %p DidEnd !", editBox);
+    //CCLog("editBox %p DidEnd !", editBox);
 }
 
 void PlayerName::editBoxTextChanged(cocos2d::extension::CCEditBox* editBox,
                                     const std::string& text)
 {
-    CCLog("editBox %p TextChanged, text: %s ", editBox, text.c_str());
+    //CCLog("editBox %p TextChanged, text: %s ", editBox, text.c_str());
 }
 
 void PlayerName::editBoxReturn(cocos2d::extension::CCEditBox* editBox)
 {
-    CCLog("editBox %p was returned !");
+    //CCLog("editBox %p was returned !");
     GameManager::sharedGameManager()->setName(m_pEditName->getText());
 }
 void PlayerName::menuHard(CCObject *pSender)
@@ -96,7 +96,7 @@ void PlayerName::menuHard(CCObject *pSender)
 void PlayerName::menuMedium(CCObject *pSender)
 {
     if (m_pEditName->getText() != "") {
-        GameManager::sharedGameManager()->setLevel(1);
+        GameManager::sharedGameManager()->setLevel(2);
         CCScene *gamePlayScene = GamePlay::scene();
         CCDirector::sharedDirector()->replaceScene(gamePlayScene);
     }
@@ -104,7 +104,7 @@ void PlayerName::menuMedium(CCObject *pSender)
 void PlayerName::menuEasy(CCObject *pSender)
 {
     if (m_pEditName->getText() != "") {
-        GameManager::sharedGameManager()->setLevel(2);
+        GameManager::sharedGameManager()->setLevel(1);
         CCScene *gamePlayScene = GamePlay::scene();
         CCDirector::sharedDirector()->replaceScene(gamePlayScene);
     }

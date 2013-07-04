@@ -313,6 +313,7 @@
 		84A2588E17783721001AD208 /* GameManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A2588A17783721001AD208 /* GameManager.cpp */; };
 		84A2588F17783721001AD208 /* PlayerName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A2588C17783721001AD208 /* PlayerName.cpp */; };
 		84A2589217785613001AD208 /* green_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 84A2589117785613001AD208 /* green_edit.png */; };
+		DC71402417841CBF001B275B /* InputEmail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC71402317841CBF001B275B /* InputEmail.cpp */; };
 		DCEB633E1773F0A7004AEB39 /* btn_Continue.png in Resources */ = {isa = PBXBuildFile; fileRef = DCEB633C1773F0A6004AEB39 /* btn_Continue.png */; };
 		DCEB633F1773F0A7004AEB39 /* btn_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = DCEB633D1773F0A6004AEB39 /* btn_menu.png */; };
 		DCF4F78B1772C9C0003E6EB0 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCF4F78A1772C9C0003E6EB0 /* libcurl.a */; };
@@ -962,6 +963,8 @@
 		84A2588D17783721001AD208 /* PlayerName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerName.h; path = Classes/PlayerName.h; sourceTree = "<group>"; };
 		84A25890177837D3001AD208 /* AppMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppMacros.h; path = Classes/AppMacros.h; sourceTree = "<group>"; };
 		84A2589117785613001AD208 /* green_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = green_edit.png; path = Resources/green_edit.png; sourceTree = "<group>"; };
+		DC71402217841CAC001B275B /* InputEmail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InputEmail.h; sourceTree = "<group>"; };
+		DC71402317841CBF001B275B /* InputEmail.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputEmail.cpp; sourceTree = "<group>"; };
 		DCEB633C1773F0A6004AEB39 /* btn_Continue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_Continue.png; path = Resources/btn_Continue.png; sourceTree = "<group>"; };
 		DCEB633D1773F0A6004AEB39 /* btn_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_menu.png; path = Resources/btn_menu.png; sourceTree = "<group>"; };
 		DCF4F78A1772C9C0003E6EB0 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcurl.a; sourceTree = "<group>"; };
@@ -2240,6 +2243,8 @@
 				0FB5B2E51769792D00E2A745 /* MyContactListener.h */,
 				8406FAC7178169C7004B1DA2 /* RankingScene.cpp */,
 				8406FAC8178169C7004B1DA2 /* RankingScene.h */,
+				DC71402217841CAC001B275B /* InputEmail.h */,
+				DC71402317841CBF001B275B /* InputEmail.cpp */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -2628,6 +2633,7 @@
 				84A2588E17783721001AD208 /* GameManager.cpp in Sources */,
 				84A2588F17783721001AD208 /* PlayerName.cpp in Sources */,
 				8406FAC9178169C8004B1DA2 /* RankingScene.cpp in Sources */,
+				DC71402417841CBF001B275B /* InputEmail.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
