@@ -77,7 +77,7 @@ GamePlay::GamePlay()
     m_radius1 = _player1->getContentSize().height/2;
     circle1.m_radius = m_radius1/PTM_RATIO;
     player1FixtureDef.shape = &circle1;
-    player1FixtureDef.density = 1.1f;
+    player1FixtureDef.density = 5.0f;
     player1FixtureDef.friction = 0.3f;
     player1FixtureDef.restitution = 0.0f;
     _player1Fixture = _player1Body->CreateFixture(&player1FixtureDef);
@@ -89,7 +89,7 @@ GamePlay::GamePlay()
     b2BodyDef player2BodyDef;
     player2BodyDef.type = b2_dynamicBody;
     player2BodyDef.position.Set(
-        s.width / 5 / PTM_RATIO,
+        s.width / 2 / PTM_RATIO,
         (s.height - _player2->getContentSize().height / 2) / PTM_RATIO);
     player2BodyDef.userData = _player2;
     player2BodyDef.linearDamping = 2.0f;
@@ -99,9 +99,9 @@ GamePlay::GamePlay()
     m_radius2 = _player2->getContentSize().height/2;
     circle2.m_radius = m_radius2/PTM_RATIO;
     player2FixtureDef.shape = &circle2;
-    player2FixtureDef.density = 1.1f;
+    player2FixtureDef.density = 5.0f;
     player2FixtureDef.friction = 0.3f;
-    player2FixtureDef.restitution = 0.0f;
+    player2FixtureDef.restitution = 0.1f;
     _player2Fixture = _player2Body->CreateFixture(&player2FixtureDef);
     
     
@@ -109,7 +109,7 @@ GamePlay::GamePlay()
     this->addChild(_ball, 1, 10);
     b2BodyDef ballBodyDef;
     ballBodyDef.type = b2_dynamicBody;
-    ballBodyDef.linearDamping = 0.3f;
+//    ballBodyDef.linearDamping = 1.0f;
     ballBodyDef.position.Set(s.width/2/PTM_RATIO,
                              s.height/2/PTM_RATIO);
     ballBodyDef.userData = _ball;
@@ -121,8 +121,8 @@ GamePlay::GamePlay()
     circle3.m_radius = m_radius3/PTM_RATIO;
     ballFixtureDef.shape = &circle3;
     ballFixtureDef.density = 1.0f;
-    ballFixtureDef.friction = 0.2f;
-    ballFixtureDef.restitution = 1.0f;
+    ballFixtureDef.friction = 0.0f;
+    ballFixtureDef.restitution = 0.7f;
     ballFixtureDef.filter.groupIndex = -10;
     _ballFixture = _ballBody->CreateFixture(&ballFixtureDef);
     
@@ -159,15 +159,6 @@ GamePlay::GamePlay()
     _player2ScoreLabel2->setRotation(90);
     this->addChild(_player2ScoreLabel2);
     
-    this->addChild(inp);
-    this->addChild(outp);
-//    b2Vec2 p1 = _ballBody->GetPosition();
-////    float x2 = _ballBody->GetPosition().x * (1 + _ballBody->GetLinearVelocity().x);
-////    float y2 = _ballBody->GetPosition().y * (1 + _ballBody->GetLinearVelocity().y);
-////    b2Vec2 p2(x2, y2);
-//    b2Vec2 p2 = this->ptm2(200, 100);
-//    this->drawReflectedRay(p1, p2);
-
 
     schedule(schedule_selector(GamePlay::update));
     schedule(schedule_selector(GamePlay::handleProcess), 0.025);
@@ -237,6 +228,7 @@ void GamePlay::createEdge(float x1, float y1,
                         b2Vec2(x2 / PTM_RATIO, y2 / PTM_RATIO));
     b2FixtureDef groundEdgeDef;
     groundEdgeDef.shape = &groundEdgeShape;
+    groundEdgeDef.restitution = 0.1;
     groundEdgeDef.filter.groupIndex = groupIndex;
     _groundBody->CreateFixture(&groundEdgeDef);
 }
@@ -277,16 +269,25 @@ void GamePlay::update(float dt)
                     b->SetLinearVelocity(b2Vec2(0, 0));
                     b->SetFixedRotation(true);
                 }
-                if (myActor->getTag() == 98 &&
-                    myActor->getPositionX() == s.width / 2 &&
-                    myActor->getPositionY() <= myActor->getContentSize().width) {
-                    b->SetLinearVelocity(b2Vec2(0, 0));
-                    b->SetFixedRotation(true);
+                if (myActor->getTag() == 98) {
+                    if (
+                    myActor->getPositionX() >= w / 2 - myActor->getContentSize().width
+                    &&
+                    myActor->getPositionX() <= w / 2 + myActor->getContentSize().width
+                    &&
+                    myActor->getPositionY() >= h - myActor->getContentSize().height / 2 - 20
+                    &&
+                    b->GetLinearVelocity().y  >= 0) {
+                        b->SetLinearVelocity(b2Vec2(0, 0));
+                        b->SetFixedRotation(true);
+                    }
+                    if (myActor->getPositionY() <= h / 2 + _ball->getContentSize().height) {
+                        lastHit = 0;
+                        this->defenseCenter();
+                    }
                 }
-                
             }
         }
-        
         #pragma mark Goal !!!
         if (_ball->getPositionY() >= s.height + _ball->getContentSize().height/2) {
             this->playerScore(1);
@@ -297,7 +298,6 @@ void GamePlay::update(float dt)
             this->playerScore(2);
             this->gameReset();
         }
-
     }
     
         #pragma mark When Finish Game
@@ -316,27 +316,26 @@ void GamePlay::update(float dt)
         }
     }
     
+    
     std::vector<MyContact>::iterator pos;
     for(pos = _contactListener->_contacts.begin();
         pos != _contactListener->_contacts.end(); ++pos) {
         MyContact contact = *pos;
         
+//        if ((_ballBody->GetLinearVelocity().y > 2 || _ballBody->GetLinearVelocity().x > 2) &&
+//            (contact.fixtureA == _ballFixture || contact.fixtureB == _ballFixture)) {
+//            SimpleAudioEngine::sharedEngine()->playEffect("hitPuck.wav");
+//        }
+        
         if ((contact.fixtureA == _ballFixture && contact.fixtureB == _player2Fixture) ||
             (contact.fixtureA == _player2Fixture && contact.fixtureB == _ballFixture)) {
-            attacked = true;
-            float px = _player2->getPositionX();
-            float py = _player2->getPositionY();
-            _player2Body->ApplyLinearImpulse(
-                                             b2Vec2(s.width / 2 - px, s.height - _player2->radius() - py),
-                                             _player2Body->GetWorldCenter());
+//            b2Vec2 p1 = _ballBody->GetPosition();
+//            b2Vec2 p2 = 1.1 * p1;
+//            drawReflectedRay(p1, p2);
+            lastHit = 0;
+            this->defenseCenter();
         }
     }
-    
-//    b2Vec2 p1 = this->ptm(_ball->getPosition());
-//    float x2 = _ball->getPositionX() * (1 + _ballBody->GetLinearVelocity().x);
-//    float y2 = _ball->getPositionY() * (1 + _ballBody->GetLinearVelocity().y);
-//    b2Vec2 p2 = this->ptm2(x2, y2);
-//    this->drawReflectedRay(p1, p2);
     
 }
 
@@ -344,23 +343,26 @@ void GamePlay::update(float dt)
 
 void GamePlay::handleProcess() {
     lastHit += 25;
-    float y   = _ball->getPositionY();
-    float py = _player2->getPositionY();
+    float x = _ball->getPositionX();
+    float y = _ball->getPositionY();
     
-    if (lastHit >= 500) {
-        if (py > y && y > s.height / 2) {
+    float vx = _ballBody->GetLinearVelocity().x;
+    float vy = _ballBody->GetLinearVelocity().y;
+    float br = _ball->getContentSize().width / 2;
+    
+    if (lastHit >= 300) {
+        if ((y >= h / 2 - br && y <= 3 * h /4) ||
+            (y > 3 * h / 4 && x > w / 2 && x < 3 * w / 4)) {
             this->attack();
-            lastHit = 0;
-            this->defense();
         }
     } else {
-        this->defense();
+        this->defenseCenter();
     }
     
 }
 
 void GamePlay::wander() {
-    if ((int)lastHit % 500 == 0) {
+    if (lastHit % 500 == 0) {
         float vx = rand() % 10000 - 5000;
         float vy = _player2->radius();
         
@@ -370,14 +372,34 @@ void GamePlay::wander() {
 }
 
 
-void GamePlay::defense() {
+void GamePlay::defenseLeft() {
     float px = _player2->getPositionX();
     float py = _player2->getPositionY();
+    float br = _ball->getContentSize().width / 2;
+    
+    _player2Body->ApplyLinearImpulse(this->ptm2(7 * (w * 3 / 8 - px),
+                                                7 * (h - br - 10 - py)),
+                                     _player2Body->GetWorldCenter());
+}
 
-    if (py > s.height / 2)
-    _player2Body->ApplyLinearImpulse(
-            b2Vec2(s.width / 2 - px, s.height - _player2->radius() - py),
-            _player2Body->GetWorldCenter());
+void GamePlay::defenseRight() {
+    float px = _player2->getPositionX();
+    float py = _player2->getPositionY();
+    float br = _ball->getContentSize().width / 2;
+    
+    _player2Body->ApplyLinearImpulse(this->ptm2(7 * (w * 5 / 8 - px),
+                                                7 * (h - br - 10  - py)),
+                                     _player2Body->GetWorldCenter());
+}
+
+void GamePlay::defenseCenter() {
+    float px = _player2->getPositionX();
+    float py = _player2->getPositionY();
+    float br = _ball->getContentSize().width / 2;
+    
+    _player2Body->ApplyLinearImpulse(this->ptm2(17 * (w / 2 - px),
+                                                17 * (h - br - 10 - py)),
+                                     _player2Body->GetWorldCenter());
 }
 
 void GamePlay::attack() {
@@ -385,8 +407,7 @@ void GamePlay::attack() {
     float y = _ball->getPositionY();
     float px = _player2->getPositionX();
     float py = _player2->getPositionY();
-//    _player2Body->SetLinearVelocity(b2Vec2(0, 0));
-    _player2Body->ApplyLinearImpulse(b2Vec2(10 * (x - px), 10 * (y - py)),
+    _player2Body->ApplyLinearImpulse(b2Vec2(17 * (x - px), 17 * (10 + y - py)),
                                     _player2Body->GetWorldCenter());
 }
 
@@ -412,7 +433,7 @@ void GamePlay::ccTouchesBegan(CCSet* touches, CCEvent* event) {
         _mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
         _player1Body->SetAwake(true);
     }
-    
+
     if (playing == false) {
         if (win == true) {
             int kcPlayWin = ccpDistance(location, ccp(this->replayWin->getPosition().x, this->replayWin->getPosition().y));
@@ -480,7 +501,7 @@ void GamePlay::playerScore(int player) {
     
     if (player == 1) {
         _player1Score++;
-        _sc1Tens = _player1Score % 10;
+        _sc1Tens = _player1Score  % 10;
         _sc1SingleDigit = _player1Score / 10;
         sprintf(scoreBuff, "%d.png", _sc1Tens);
         CCSprite *tens = CCSprite::createWithSpriteFrameName(scoreBuff);
@@ -493,9 +514,8 @@ void GamePlay::playerScore(int player) {
         
         
         _ballBody->SetLinearVelocity(b2Vec2(0, 0));
-        _ballBody->SetTransform(b2Vec2(s.width/2/PTM_RATIO,
-                                       (s.height/2 -
-                                        _ball->getContentSize().width/2)/PTM_RATIO), 0);
+        _ballBody->SetTransform(
+            this->ptm2(w/2, h/2 - _ball->getContentSize().height), 0);
     }
     if (player == 2) {
         _player2Score++;
@@ -511,9 +531,8 @@ void GamePlay::playerScore(int player) {
         _player2ScoreLabel2->setTexture(singleDigit->getTexture());
         
         _ballBody->SetLinearVelocity(b2Vec2(0, 0));
-        _ballBody->SetTransform(b2Vec2(s.width/2/PTM_RATIO,
-                                       (s.height/2 -
-                                        _ball->getContentSize().width/2)/PTM_RATIO), 0);
+        _ballBody->SetTransform(
+            this->ptm2(w/2, h/2 - _ball->getContentSize().width), 0);
     }
     
 }
@@ -542,8 +561,13 @@ void GamePlay::gameReset()
 //new function for FooTest class
 void GamePlay::drawReflectedRay(b2Vec2 p1, b2Vec2 p2)
 {
+    CCLabelTTF *inp     = CCLabelTTF::create("I", "Arial", 32);
+    CCLabelTTF *outp    = CCLabelTTF::create("O", "Arial", 32);
     inp->setPosition(ccp(p1.x * PTM_RATIO, p1.y * PTM_RATIO));
     outp->setPosition(ccp(p2.x * PTM_RATIO, p2.y * PTM_RATIO));
+    this->addChild(inp);
+    this->addChild(outp);
+
     CCLOG("p1 & p2: (%f %f) (%f %f)",
        p1.x * PTM_RATIO,
        p1.y * PTM_RATIO,

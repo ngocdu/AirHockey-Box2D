@@ -54,7 +54,9 @@ public:
     
     void handleProcess();
     void wander();
-    void defense();
+    void defenseCenter();
+    void defenseLeft();
+    void defenseRight();
     void attack();
     
     void _moveTo(float ox, float oy, float px, float py);
@@ -77,6 +79,10 @@ public:
     
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
+    float h = s.height;
+    float w = s.width;
+    
+    
     b2Body *_groundBody;
     b2Body *_midleLineBody;
     b2Body *_player1Body;
@@ -99,8 +105,7 @@ private:
     CCSprite *_player2ScoreLabel1;
     CCSprite *_player2ScoreLabel2;
     
-    CCLabelTTF *inp     = CCLabelTTF::create("I", "Arial", 32);
-    CCLabelTTF *outp    = CCLabelTTF::create("O", "Arial", 32);
+    
     
     int _player1Score = 0;
     int _sc1Tens;
@@ -109,7 +114,7 @@ private:
     int _sc2Tens;
     int _sc2SingleDigit;
     
-    float lastHit = 0;
+    int lastHit = 0;
     float m_radius1;
     float m_radius2;
     float m_radius3;
