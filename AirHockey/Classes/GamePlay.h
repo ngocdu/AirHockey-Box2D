@@ -67,6 +67,9 @@ public:
     void moveBgLose(int i);
     void rePlay();
     
+    void checkHightScore();
+    void onHttpRequestCompleted(CCNode *sender, void *data);
+    
 private:
     CCSize s = CCDirector::sharedDirector()->getWinSize();
     b2Body *_groundBody;

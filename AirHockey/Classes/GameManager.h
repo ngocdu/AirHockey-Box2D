@@ -10,7 +10,9 @@ class GameManager : public cocos2d::CCObject
 private:
     bool bgm;
     string name;
-    int level;
+    int level;//esey =
+    string email;
+    int point;
     //Constructor
     GameManager();
 
@@ -24,8 +26,12 @@ public:
     void setBgm(bool bgm);
     string getName();
     void setName(string name);
+    string getEmail();
+    void setEmail(string email);
     int getLevel();
     void setLevel(int level);
+    int getPoint();
+    void setPoint(int point);
 };
 
 #endif
