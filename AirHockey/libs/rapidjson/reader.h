@@ -5,8 +5,13 @@
 // Version 0.1
 
 #include "rapidjson.h"
+<<<<<<< HEAD
 #include "internal/pow10.h"
 #include "internal/stack.h"
+=======
+#include "pow10.h"
+#include "stack.h"
+>>>>>>> ai-player
 #include <csetjmp>
 
 #ifdef RAPIDJSON_SSE42

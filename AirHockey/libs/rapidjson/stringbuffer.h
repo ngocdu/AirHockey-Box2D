@@ -2,7 +2,11 @@
 #define RAPIDJSON_STRINGBUFFER_H_
 
 #include "rapidjson.h"
+<<<<<<< HEAD
 #include "internal/stack.h"
+=======
+#include "stack.h"
+>>>>>>> ai-player
 
 namespace rapidjson {
 

@@ -2,8 +2,13 @@
 #define RAPIDJSON_WRITER_H_
 
 #include "rapidjson.h"
+<<<<<<< HEAD
 #include "internal/stack.h"
 #include "internal/strfunc.h"
+=======
+#include "stack.h"
+#include "strfunc.h"
+>>>>>>> ai-player
 #include <cstdio>	// snprintf() or _sprintf_s()
 #include <new>		// placement new
 

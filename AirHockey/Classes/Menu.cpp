@@ -5,12 +5,18 @@
 //  Created by macbook_016 on 2013/06/20.
 //
 //
-
+#include "HttpClient.h"
 #include "Menu.h"
+<<<<<<< HEAD
 #include "PlayerName.h"
 #include "GameManager.h"
+=======
+#include "GamePlay.h"
+#include "document.h"
+>>>>>>> ai-player
 #include "RankingScene.h"
 using namespace cocos2d;
+using namespace cocos2d::extension;
 CCScene* Menu::scene()
 {
     // 'scene' is an autorelease object
@@ -82,11 +88,15 @@ void Menu::menuBGM(CCObject* pSender)
 }
 void Menu::menuRanking(CCObject* pSender)
 {
+<<<<<<< HEAD
     CCScene *rankScene = CCScene::create();
     RankingScene *rankLayer = RankingScene::create();
     rankScene->addChild(rankLayer);
     CCScene *pScene = CCTransitionFadeTR::create(2, rankScene);
     CCDirector::sharedDirector()->replaceScene(pScene);
+=======
+    CCDirector::sharedDirector()->replaceScene(RankingScene::scene());
+>>>>>>> ai-player
 }
 void Menu::menuStartgame(CCObject* pSender)
 {
@@ -94,5 +104,3 @@ void Menu::menuStartgame(CCObject* pSender)
     CCScene *pScene = CCTransitionFadeTR::create(2, playerNameScene);
     CCDirector::sharedDirector()->replaceScene(pScene);
 }
-
-
